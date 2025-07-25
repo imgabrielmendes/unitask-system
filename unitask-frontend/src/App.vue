@@ -1,15 +1,12 @@
+<!-- src/App.vue -->
 <template>
   <div id="app">
-    <TarefasList />
+    <router-view />
   </div>
 </template>
 
 <script>
-import TarefasList from './components/TarefasList.vue';
-
 export default {
-  components: {
-    TarefasList,
-  },
-};
+  name: 'App'
+}
 </script>

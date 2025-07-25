@@ -1,13 +1,9 @@
+// src\axios.js
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      tarefas: [],
-    };
-  },
-  async mounted() {
-    const response = await axios.get('http://localhost:8000/api/tarefas');
-    this.tarefas = response.data;
-  },
-};
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+  withCredentials: true
+})
+
+export default api
