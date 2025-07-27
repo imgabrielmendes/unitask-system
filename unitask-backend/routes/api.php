@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TaskController;
+
 Route::get('/ping', function () {
     return response()->json(['pong' => true]);
 });
@@ -21,3 +24,7 @@ Route::get('/tarefas', function () {
         ['id' => 3, 'titulo' => 'Agendar reunião', 'concluida' => false],
     ]);
 });
+
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/home', [TaskController::class, 'getTaskforUser']);
