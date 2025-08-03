@@ -1,14 +1,31 @@
-<!-- src\components\auth\LoginForm.vue -->
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'  // importe o useRouter
 import InputText from '@/components/ui/InputText.vue'
+import { login } from '@/services/authService'
 
 const email = ref('')
 const password = ref('')
+const router = useRouter()
+
+async function handleSubmit(event) {
+  event.preventDefault()
+  try {
+
+    await login(email, password)
+
+      // alert('Login realizado com sucesso!')
+      router.push('/home')
+
+  } catch (error) {
+      alert('Erro ao fazer login: ' + (error.response?.data?.message || error.message))
+  }
+}
 </script>
 
+
 <template>
-  <form class="space-y-4 ">
+  <form @submit="handleSubmit" class="space-y-4">
     <InputText
       id="email"
       label="Email"

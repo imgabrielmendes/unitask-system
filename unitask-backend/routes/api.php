@@ -1,30 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskController;  // se quiser proteger rotas de tarefas depois
 
-Route::get('/ping', function () {
-    return response()->json(['pong' => true]);
-});
-
-Route::get('/', function () {
-    return response()->json([
-        ['id' => 1, 'titulo' => 'Revisar orçamento', 'concluida' => false],
-        ['id' => 2, 'titulo' => 'Enviar relatório', 'concluida' => true],
-        ['id' => 3, 'titulo' => 'Agendar reunião', 'concluida' => false],
-    ]);
-});
-
-Route::get('/tarefas', function () {
-    return response()->json([
-        ['id' => 1, 'titulo' => 'Revisar orçamento', 'concluida' => false],
-        ['id' => 2, 'titulo' => 'Enviar relatório', 'concluida' => true],
-        ['id' => 3, 'titulo' => 'Agendar reunião', 'concluida' => false],
-    ]);
-});
+use Illuminate\Http\Request;
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/home', [TaskController::class, 'getTaskforUser']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    // aqui você pode colocar outras rotas protegidas, tipo:
+    // Route::apiResource('tasks', TaskController::class);
+});
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});

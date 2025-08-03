@@ -12,10 +12,13 @@ class TaskController extends Controller
 {
     public function getTaskforUser(){
 
+
     $user = Auth::user();   
+  
     $userId = Auth::id();
 
     $task = Task::getTaskforIdUser($userId);
+
 
     return response()->json($task);
 

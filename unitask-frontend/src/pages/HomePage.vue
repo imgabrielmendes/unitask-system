@@ -1,11 +1,9 @@
-<!-- src/pages/HomePage.vue -->
 <template>
   <div>
     <h1>Bem-vindo à Home Page!</h1>
     <p>Este é o conteúdo da página inicial.</p>
 
-    <h2>Lista de Tarefas</h2>
-
+    <h2>Lista de Tarefas (taskService)</h2>
     <ul v-if="tarefas.length">
       <li v-for="tarefa in tarefas" :key="tarefa.id">
         <strong>{{ tarefa.titulo }}</strong> —
@@ -14,8 +12,21 @@
         </span>
       </li>
     </ul>
-
     <p v-else>Nenhuma tarefa encontrada.</p>
+
+    <h2>Tarefas do Home Service</h2>
+    <ul v-if="tarefasHome.length">
+      <li v-for="tarefa in tarefasHome" :key="tarefa.id">
+        <strong>{{ tarefa.title }}</strong> — 
+        <span :class="tarefa.status === 'completed' ? 'concluida' : 'pendente'">
+          {{ tarefa.status === 'completed' ? 'Concluída' : 'Pendente' }}
+        </span>
+        <br />
+        <small>Descrição: {{ tarefa.description }}</small><br />
+        <small>Prazo: {{ tarefa.due_date }}</small>
+      </li>
+    </ul>
+    <p v-else>Nenhuma tarefa do Home Service encontrada.</p>
 
     <buttonteste @click="handleClick" variant="primary" size="md">
       Clique Aqui
@@ -29,6 +40,8 @@
 
 <script>
 import { gettarefas } from '@/services/taskService.js'
+import { getAllTask } from '@/services/homeService.js'
+
 import buttonteste from '@/components/ui/button.vue'
 
 export default {
@@ -38,16 +51,21 @@ export default {
   },
   data() {
     return {
-      tarefas: []
+      tarefas: [],
+      tarefasHome: []
     }
   },
   async mounted() {
     try {
-      const response = await gettarefas()
-      this.tarefas = response.data
+      const responseTask = await gettarefas()
+      this.tarefas = responseTask.data
+
+      const responseHome = await getAllTask()
+      this.tarefasHome = responseHome.data
     } catch (error) {
       console.error('Erro ao buscar tarefas:', error)
       this.tarefas = []
+      this.tarefasHome = []
     }
   },
   methods: {

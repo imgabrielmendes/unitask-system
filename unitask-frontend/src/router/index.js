@@ -15,12 +15,24 @@ const routes = [
     component: DefaultLayout,
     children: [
       {
+        path: 'profile',
+        name: 'Profile',
+        component: HomePage
+      }
+    ]
+  },
+
+  {
+    path: '/Home',
+    component: DefaultLayout,
+    children: [
+      {
         path: '',
         name: 'Home',
         component: HomePage
       },
       {
-        path: 'profile',
+        path: 'user',
         name: 'Profile',
         component: HomePage
       }
