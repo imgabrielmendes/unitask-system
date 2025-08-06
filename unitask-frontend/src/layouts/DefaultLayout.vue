@@ -14,6 +14,7 @@
 <script>
 import headerUser from '@/components/tasks/headerLadingPage.vue'
 import footerUser from '@/components/tasks/footer.vue'
+
 export default {
   components: {
     headerUser,

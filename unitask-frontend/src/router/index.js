@@ -2,8 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // src/pages/HomePage.vue
 import HomePage from '@/pages/HomePage.vue'
+// src\pages\HomeUserPage.vue
+import HomeUserPage from '../pages/HomeUserPage.vue'
+
+
 // src/layouts/DefaultLayout.vue
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+// src\layouts\HomeUserSystem.vue
+import HomeUserSystem from '@/layouts/HomeUserSystem.vue'
 
 //src\layouts\LoginRegisterLayoult.vue
 import LoginRegisterPage from '../pages/LoginRegisterPage.vue'
@@ -24,17 +30,12 @@ const routes = [
 
   {
     path: '/Home',
-    component: DefaultLayout,
+    component: HomeUserSystem,
     children: [
       {
         path: '',
         name: 'Home',
-        component: HomePage
-      },
-      {
-        path: 'user',
-        name: 'Profile',
-        component: HomePage
+        component: HomeUserPage
       }
     ]
   },
