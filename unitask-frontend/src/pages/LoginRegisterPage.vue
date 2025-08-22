@@ -7,6 +7,6 @@
 </template>
 
 <script setup>
-import Modal from '@/components/tasks/forms/Modal.vue'
+import Modal from '@/components/tasks/forms/modal.vue'
 import LoginForm from '@/components/auth/LoginForm.vue'
 </script>
