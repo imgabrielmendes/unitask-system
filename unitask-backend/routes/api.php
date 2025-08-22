@@ -1,16 +1,23 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TaskController;  // se quiser proteger rotas de tarefas depois
+use App\Http\Controllers\TaskController;
+
+use App\Models\Task;
 
 use Illuminate\Http\Request;
 
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/task', [Task::class, 'getTaskForTeam']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    // aqui você pode colocar outras rotas protegidas, tipo:
+
     // Route::apiResource('tasks', TaskController::class);
 });
 

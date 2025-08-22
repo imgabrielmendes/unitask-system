@@ -1,0 +1,22 @@
+{
+    "name": "Laravel Codespace",
+
+    "image": "mcr.microsoft.com/devcontainers/php:8.2",
+  
+
+    "forwardPorts": [8000],
+
+    
+    "postCreateCommand": "composer install && cp .env.example .env && php artisan key:generate",
+  
+
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "bmewburn.vscode-intelephense-client",
+          "onecentlin.laravel-blade",
+          "EditorConfig.EditorConfig"
+        ]
+      }
+    }
+  }
