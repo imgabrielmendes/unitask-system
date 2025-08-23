@@ -40,6 +40,7 @@
 
 <script>
 import { gettarefas } from '@/services/taskService.js'
+import { getMyTasks } from '../services/taskService'
 import { getAllTask } from '@/services/homeService.js'
 
 import buttonteste from '@/components/ui/button.vue'
@@ -52,13 +53,17 @@ export default {
   data() {
     return {
       tarefas: [],
-      tarefasHome: []
+      tarefasHome: [],
+      mytasks: []
     }
   },
   async mounted() {
     try {
       const responseTask = await gettarefas()
       this.tarefas = responseTask.data
+
+      const getMyTasks = await getMyTasks()
+      this.mytasks = getMyTasks.data
 
       const responseHome = await getAllTask()
       this.tarefasHome = responseHome.data

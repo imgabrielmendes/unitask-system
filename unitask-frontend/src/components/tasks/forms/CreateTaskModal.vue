@@ -13,6 +13,7 @@
                                         <div class="grid grid-flow-col grid-rows-2">
 
                                               <InputText
+                                                id="inputTittleTask"
                                                 label=""
                                                 v-model="nome"
                                                 placeholder="Informe o titulo"
@@ -29,6 +30,7 @@
                                           <p class="text-white">Responsável</p>
 
                                           <Select
+                                                id = "selectResponseTask"
                                                 placeholder="Membros"
                                                 v-model="selectedFruit"
                                                 :options="fruitOptions"
@@ -41,6 +43,7 @@
                                           <p class="text-white">Data de conclusão</p>
 
                                           <InputDate
+                                            id="dateTask"
                                             label=""
                                             v-model="dataInicio"
                                             :error="dataErro"
@@ -100,9 +103,21 @@ import InputTextarea from "@/components/ui/inputs/Textarea.vue"
 import Select from "../../ui/selects/Select.vue";
 import InputDate from "../../ui/inputs/InputDate.vue";
 
+import { ref } from "vue"
+import { userRouter } from "vue-router"
+import {createTask} from "@/services/TaskService"
+
+const descricao = ref('')
+const titulo = ref('')
+const Tags = ref('')
+
+async function handleSubmit(event){
+    event.preventDefault(){
+      await createTask(titulo, descricao, Tags)
+    }
+}
 
 export default {
-
   components: {
       InputText, InputTextarea, Select, InputDate
   },
