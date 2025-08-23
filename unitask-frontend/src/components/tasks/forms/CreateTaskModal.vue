@@ -103,18 +103,20 @@ import InputTextarea from "@/components/ui/inputs/Textarea.vue"
 import Select from "../../ui/selects/Select.vue";
 import InputDate from "../../ui/inputs/InputDate.vue";
 
-import { ref } from "vue"
-import { userRouter } from "vue-router"
-import {createTask} from "@/services/TaskService"
+import { ref } from "vue";
+// import { userRouter } from "vue-router";
+import {createTask} from "@/services/TaskService";
 
-const descricao = ref('')
-const titulo = ref('')
-const Tags = ref('')
+const descricao = ref('');
+const titulo = ref('');
+const Tags = ref('');
 
-async function handleSubmit(event){
-    event.preventDefault(){
-      await createTask(titulo, descricao, Tags)
-    }
+async function handleSubmit(event)
+{
+    event.preventDefault() 
+      {
+        await createTask(titulo, descricao, Tags)
+      }
 }
 
 export default {

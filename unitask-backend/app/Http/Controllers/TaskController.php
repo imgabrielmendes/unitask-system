@@ -11,20 +11,6 @@ use App\Models\Task;
 
 class TaskController extends Controller
 {
-<<<<<<< HEAD
-
-        public function getTasksForUser(Request $request)
-        {
-            $userId = auth()->id();
-
-            $tasks = Task::with(['assignedUser', 'team'])
-                        ->assignedTo($userId)
-                        ->orderBy('due_date')
-                        ->paginate(10);
-
-            return response()->json($tasks);
-        }
-=======
 
     public function getTaskforUser(){
 
@@ -35,5 +21,4 @@ class TaskController extends Controller
     return response()->json($task);
 
     }
->>>>>>> 54b7ea1d7b4c0eae695fd35953b435dee4fe259a
 }

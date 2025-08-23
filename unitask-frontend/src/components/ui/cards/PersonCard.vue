@@ -6,9 +6,6 @@
         <div class="grid grid-cols-2 gap-4">
 
             <PersonToast></PersonToast>
-            <PersonToast></PersonToast>
-            <PersonToast></PersonToast>
-            <PersonToast></PersonToast>
 
         </div>
             </ul>

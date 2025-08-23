@@ -35,22 +35,30 @@ public static function getTaskforIdUser($userId)
  */
 public static function getTaskForTeam(Request $request): JsonResponse
     {
-        // Seus dados originais
+
         $mockData = [
             'tarefas' => [
-                ['id' => 101, 'nome' => 'Analisar relatório'],
-                ['id' => 102, 'nome' => 'Preparar apresentação'],
-                ['id' => 103, 'nome' => 'Corrigir bug na tela de login']
+                ['id' => 101, 
+                    'nome' => 'Analisar relatório',
+                    'team' => 'Time1'
+                ],
+                ['id' => 102, 
+                    'nome' => 'Preparar apresentação',
+                    'team' => 'Time2'
+                ],
+                ['id' => 103, 
+                    'nome' => 'Corrigir bug na tela de login',
+                    'team' => 'Time3'
+                ]
             ]
         ];
 
-
         $tarefas = $mockData['tarefas'];
-
 
         $formattedTasks = array_map(function ($tarefa) {
             return [
                 'label' => $tarefa['nome'],
+                'team' => $tarefa['team'],
                 'done' => false 
             ];
         }, $tarefas);
