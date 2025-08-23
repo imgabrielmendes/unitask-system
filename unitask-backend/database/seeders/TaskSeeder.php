@@ -10,7 +10,6 @@ class TaskSeeder extends Seeder
 {
     public function run(): void
     {
-        // Verifica se há time existente, senão cria um
         $team = Team::first() ?? Team::factory()->create();
 
         Task::factory()
