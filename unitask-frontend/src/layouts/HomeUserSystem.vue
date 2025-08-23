@@ -12,7 +12,6 @@
 <script>
 import headerUser from '@/components/tasks/headerHomeUserPage.vue'
 
-
 export default {
     components:{
          headerUser

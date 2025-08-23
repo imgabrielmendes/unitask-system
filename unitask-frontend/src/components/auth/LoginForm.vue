@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'  // importe o useRouter
+import { useRouter } from 'vue-router' 
 import InputText from '@/components/ui/InputText.vue'
 import { login } from '@/services/authService'
 
@@ -13,16 +13,13 @@ async function handleSubmit(event) {
   try {
 
     await login(email, password)
-
-      // alert('Login realizado com sucesso!')
-      router.push('/home')
+    router.push('/home')
 
   } catch (error) {
       alert('Erro ao fazer login: ' + (error.response?.data?.message || error.message))
   }
 }
 </script>
-
 
 <template>
   <form @submit="handleSubmit" class="space-y-4">

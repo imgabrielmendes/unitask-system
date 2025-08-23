@@ -20,6 +20,9 @@
 
 </style>
 <script>
+    import { ref, onMounted} from 'vue'
+    import { getAllMembers } from '@/services/taskService'
+
     import PersonToast from '@/components/ui/toast/PersonToast.vue'
     
 export default {
