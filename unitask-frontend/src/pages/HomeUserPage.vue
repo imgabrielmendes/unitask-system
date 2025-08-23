@@ -1,4 +1,6 @@
 <template>
+
+  <h1 class="min-h-20 flex items-center justify-center text-white" > Olá! Usuário </h1>
   
   <div class="min-h-40 flex items-center justify-center px-4">
       <Search />

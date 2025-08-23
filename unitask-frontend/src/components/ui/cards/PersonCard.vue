@@ -3,7 +3,7 @@
         <h2 class="text-xl font-semibold mb-4 text-white-800">Membros</h2>
             <ul class="space-y-2">
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid">
 
             <PersonToast></PersonToast>
 

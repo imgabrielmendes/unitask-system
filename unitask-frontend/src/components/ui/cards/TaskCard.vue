@@ -1,10 +1,24 @@
 <template>
-  <div class="bg-richBlackTwo rounded-2xl shadow p-6 w-full max-w-md">
-    <h2 class="text-xl font-semibold mb-4 text-white-800">Tarefas</h2>
 
-    <div v-if="loading" class="text-center text-white-400">
+  <div class="bg-richBlackTwo rounded-2xl shadow p-6 w-full max-w-md">
+
+    <h2 class="text-xl font-semibold mb-4 ">Tarefas</h2>
+
+    <div class="bg-richBlackOne 
+                 
+                rounded-2xl 
+                shadow-md w-full 
+                p-5 border 
+                border-richBlackTwo 
+                flex flex-col 
+                gap-3 
+                hover:shadow-lg transition">
+
+      <div v-if="loading" class="text-center 
+                                text-white-400">
       Carregando tarefas...
     </div>
+
 
     <div v-else-if="error" class="text-center text-red-400">
       Oops! Não foi possível carregar as tarefas. Tente novamente mais tarde.
@@ -14,7 +28,7 @@
       <li
         v-for="task in tasks"
         :key="task.id"
-        class="flex items-center gap-3"
+        class=" flex items-center gap-3"
       >
         <input
           type="checkbox"
@@ -27,7 +41,7 @@
           class="cursor-pointer"
           :class="[
             'transition',
-            task.done ? 'line-through text-white-400' : 'text-white-800',
+            task.done ? 'line-through text-white-400' : '',
           ]"
         >
           {{ task.label }}
@@ -38,7 +52,11 @@
     <div v-else class="text-center text-white-400">
       Nenhuma tarefa encontrada.
     </div>
+
+    </div>
+
   </div>
+
 </template>
 
 <script setup>

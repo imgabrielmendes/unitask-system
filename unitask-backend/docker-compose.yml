@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -11,7 +11,7 @@ services:
     volumes:
       - ./:/var/www
     networks:
-      - laravel
+      - laravel_network
 
   web:
     image: nginx:alpine
@@ -21,28 +21,12 @@ services:
       - "8000:80"
     volumes:
       - ./:/var/www
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - laravel_network
     depends_on:
       - app
-    networks:
-      - laravel
-
-  db:
-    image: mysql:8.0
-    container_name: laravel_db
-    restart: unless-stopped
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: unitask
-    volumes:
-      - dbdata:/var/lib/mysql
-    networks:
-      - laravel
 
 networks:
-  laravel:
-
-volumes:
-  dbdata:
+  laravel_network:
+    driver: bridge
