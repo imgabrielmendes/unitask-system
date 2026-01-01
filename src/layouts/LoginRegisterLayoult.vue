@@ -1,5 +1,5 @@
 <template>
-  <headerDefault></headerDefault>
+  <HeaderDynamic />
 
     <main>
       <router-view/>
@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import headerDefault from '@/components/tasks/headerDefault.vue';
+import HeaderDynamic from '@/components/tasks/HeaderDynamic.vue';
 import footerUser from '@/components/tasks/footer.vue';
 
 export default {
     components: {
-        headerDefault,
+    HeaderDynamic,
         footerUser
     }
 }

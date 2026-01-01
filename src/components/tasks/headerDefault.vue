@@ -26,9 +26,13 @@
 
         <ul class="space-y-4">
           <li v-for="item in links" :key="item.name">
-            <a :href="item.href" class="block text-gray-700 font-medium hover:text-indigo-600">
+            <router-link
+              :to="item.to"
+              class="block text-gray-700 font-medium hover:text-indigo-600"
+              @click="mobileOpen = false"
+            >
               {{ item.name }}
-            </a>
+            </router-link>
           </li>
         </ul>
 
@@ -43,5 +47,10 @@ import { Dialog, DialogPanel } from '@headlessui/vue'
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 const mobileOpen = ref(false)
+
+const links = [
+  { name: 'Home', to: '/home' },
+  { name: 'Perfil', to: '/home/user' },
+]
 
 </script>

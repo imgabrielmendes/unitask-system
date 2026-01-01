@@ -1,7 +1,7 @@
 <!-- src/layouts/DefaultLayout.vue -->
 <template class="@container">
   <div class="bg-gray-950/10">
-    <headerUser></headerUser>
+    <HeaderDynamic />
 
     <main class="bg-red-950/10">
       <router-view/>
@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import headerUser from '@/components/tasks/headerLadingPage.vue'
+import HeaderDynamic from '@/components/tasks/HeaderDynamic.vue'
 import footerUser from '@/components/tasks/footer.vue'
 export default {
   components: {
-    headerUser,
+    HeaderDynamic,
     footerUser
   }
 }

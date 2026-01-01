@@ -16,8 +16,8 @@
       </ul>
 
       <div class="hidden lg:flex items-center gap-4">
-        <a href="/login" class="text-sm font-medium text-gray-700 hover:text-indigo-600">Entrar</a>
-        <a href="/cadastro" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">Cadastrar</a>
+        <router-link to="/login" class="text-sm font-medium text-gray-700 hover:text-indigo-600">Entrar</router-link>
+        <router-link to="/register" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">Cadastrar</router-link>
       </div>
 
       <button class="lg:hidden text-gray-700" @click="mobileOpen = true">
@@ -46,10 +46,14 @@
         </ul>
 
         <div class="mt-6 border-t pt-4">
-          <a href="/login" class="block mb-2 text-gray-700 hover:text-indigo-600">Entrar</a>
-          <a href="/cadastro" class="block text-center bg-indigo-600 text-white px-4 py-2 rounded-xl font-semibold hover:bg-indigo-700 transition">
+          <router-link to="/login" class="block mb-2 text-gray-700 hover:text-indigo-600" @click="mobileOpen = false">Entrar</router-link>
+          <router-link
+            to="/register"
+            class="block text-center bg-indigo-600 text-white px-4 py-2 rounded-xl font-semibold hover:bg-indigo-700 transition"
+            @click="mobileOpen = false"
+          >
             Cadastrar
-          </a>
+          </router-link>
         </div>
       </DialogPanel>
     </Dialog>

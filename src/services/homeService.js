@@ -1,3 +1,2 @@
-import api from '../axios.js'
-
-export const getAllTask = (id) => api.get(`/home`)
+export { getTarefas as getAllTask } from './taskService.js'
+export { getProjects as getAllProjects } from './projectService.js'
