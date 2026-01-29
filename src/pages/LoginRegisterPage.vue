@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-indigo-600">
+  <div class="min-h-screen bg-[#0d0a14]">
   <Modal>
     <LoginForm />
   </Modal>

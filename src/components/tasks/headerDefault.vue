@@ -1,56 +1,179 @@
 <template>
-  <header class="bg-white shadow">
-    <nav class="mx-auto max-w-7xl flex items-center justify-between p-4 lg:px-8">
-
-      <div class="flex items-center gap-2">
-        <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" class="h-8 w-auto" alt="Logo" />
-        <span class="font-bold text-xl text-gray-800">Unitask</span>
+  <header class="bg-[var(--gray-900)] border-b border-[var(--gray-800)] shadow-lg flex items-center justify-between px-8 py-4 transition-all duration-300">
+    <!-- Botão Criar -->
+    <button class="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-green-600 text-white px-4 py-2 rounded-lg hover:from-teal-500 hover:to-green-500 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105" @click="$emit('create')">
+      <i class="fa-solid fa-plus"></i>
+      <span>Criar</span>
+    </button>
+    <!-- Barra de pesquisa central -->
+    <div class="flex-1 flex justify-center">
+      <div class="relative w-full max-w-md">
+        <input
+          type="text"
+          placeholder="Pesquisar..."
+          class="w-full px-4 py-2 rounded-lg bg-[var(--gray-800)] text-white border border-[var(--gray-700)] focus:border-teal-500 outline-none placeholder:text-gray-400 transition-all duration-200"
+          v-model="search"
+          @keyup.enter="$emit('search', search)"
+        />
+        <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-[var(--gray-400)]"></i>
       </div>
-
-      <button class="lg:hidden text-gray-700" @click="mobileOpen = true">
-        <Bars3Icon class="h-6 w-6" />
-      </button>
-    </nav>
-
-    <Dialog as="div" class="lg:hidden" :open="mobileOpen" @close="mobileOpen = false">
-      <DialogPanel class="fixed inset-0 z-50 bg-white p-6 sm:max-w-sm sm:mx-auto sm:mt-8 shadow-xl rounded-xl">
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-2">
-            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" class="h-8 w-auto" alt="Logo" />
-            <span class="font-bold text-xl text-gray-800">Unitask</span>
+    </div>
+    <!-- Ações da direita -->
+    <div class="flex items-center gap-3 ml-4">
+      <!-- Notificações -->
+      <div class="relative">
+        <button 
+          @click="toggleNotifications" 
+          class="relative bg-[var(--gray-800)] text-white p-2 rounded-full hover:bg-[var(--gray-700)] transition-all duration-200 hover:scale-110"
+        >
+          <i class="fa-solid fa-bell"></i>
+          <span class="absolute -top-1 -right-1 bg-teal-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold animate-pulse">3</span>
+        </button>
+        
+        <!-- Dropdown de Notificações -->
+        <transition name="dropdown">
+          <div 
+            v-if="showNotifications" 
+            class="absolute right-0 mt-2 w-80 bg-[var(--gray-900)] border border-[var(--gray-800)] rounded-xl shadow-2xl overflow-hidden z-50"
+          >
+            <div class="p-4 border-b border-[var(--gray-800)]">
+              <h3 class="text-white font-semibold">Notificações</h3>
+            </div>
+            <div class="max-h-96 overflow-y-auto">
+              <div 
+                v-for="(notif, index) in notifications" 
+                :key="index"
+                class="p-4 border-b border-[var(--gray-800)] hover:bg-[var(--gray-800)] transition-colors cursor-pointer"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="w-2 h-2 rounded-full bg-teal-500 mt-2"></div>
+                  <div class="flex-1">
+                    <p class="text-white text-sm font-medium">{{ notif.title }}</p>
+                    <p class="text-gray-400 text-xs mt-1">{{ notif.message }}</p>
+                    <p class="text-gray-500 text-xs mt-1">{{ notif.time }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-3 text-center border-t border-[var(--gray-800)]">
+              <button class="text-teal-400 text-sm hover:text-teal-300 transition-colors">Ver todas</button>
+            </div>
           </div>
-          <button @click="mobileOpen = false">
-            <XMarkIcon class="h-6 w-6 text-gray-700" />
-          </button>
-        </div>
-
-        <ul class="space-y-4">
-          <li v-for="item in links" :key="item.name">
-            <router-link
-              :to="item.to"
-              class="block text-gray-700 font-medium hover:text-indigo-600"
-              @click="mobileOpen = false"
-            >
-              {{ item.name }}
-            </router-link>
-          </li>
-        </ul>
-
-      </DialogPanel>
-    </Dialog>
+        </transition>
+      </div>
+      
+      <!-- Perfil -->
+      <div class="relative">
+        <button 
+          @click="toggleProfile" 
+          class="bg-[var(--gray-800)] text-white p-2 rounded-full hover:bg-[var(--gray-700)] transition-all duration-200 hover:scale-110"
+        >
+          <i class="fa-solid fa-user"></i>
+        </button>
+        
+        <!-- Dropdown de Perfil -->
+        <transition name="dropdown">
+          <div 
+            v-if="showProfile" 
+            class="absolute right-0 mt-2 w-56 bg-[var(--gray-900)] border border-[var(--gray-800)] rounded-xl shadow-2xl overflow-hidden z-50"
+          >
+            <div class="p-4 border-b border-[var(--gray-800)]">
+              <p class="text-white font-semibold">@userid</p>
+              <p class="text-gray-400 text-xs mt-1">user@email.com</p>
+            </div>
+            <div class="py-2">
+              <router-link 
+                to="/preferences" 
+                class="flex items-center gap-3 px-4 py-2.5 hover:bg-[var(--gray-800)] transition-colors text-gray-300 hover:text-white"
+                @click="showProfile = false"
+              >
+                <i class="fa-solid fa-sliders text-base"></i>
+                <span class="text-sm">Preferências</span>
+              </router-link>
+              <router-link 
+                to="/settings" 
+                class="flex items-center gap-3 px-4 py-2.5 hover:bg-[var(--gray-800)] transition-colors text-gray-300 hover:text-white"
+                @click="showProfile = false"
+              >
+                <i class="fa-solid fa-gear text-base"></i>
+                <span class="text-sm">Configurações</span>
+              </router-link>
+            </div>
+            <div class="border-t border-[var(--gray-800)]">
+              <button 
+                @click="handleLogout" 
+                class="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-900/20 transition-colors text-red-400 hover:text-red-300"
+              >
+                <i class="fa-solid fa-right-from-bracket text-base"></i>
+                <span class="text-sm font-medium">Sair</span>
+              </button>
+            </div>
+          </div>
+        </transition>
+      </div>
+    </div>
   </header>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { Dialog, DialogPanel } from '@headlessui/vue'
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { useRouter } from 'vue-router'
 
-const mobileOpen = ref(false)
+const router = useRouter()
+const search = ref('')
+const showNotifications = ref(false)
+const showProfile = ref(false)
 
-const links = [
-  { name: 'Home', to: '/home' },
-  { name: 'Perfil', to: '/home/user' },
-]
+const notifications = ref([
+  { title: 'Nova tarefa atribuída', message: 'Você foi adicionado à tarefa "Revisar código"', time: '5 min atrás' },
+  { title: 'Comentário em projeto', message: 'João comentou no projeto Frontend', time: '1 hora atrás' },
+  { title: 'Deadline próximo', message: 'A tarefa "Design System" vence em 2 dias', time: '3 horas atrás' },
+])
 
+function toggleNotifications() {
+  showNotifications.value = !showNotifications.value
+}
+
+// Fechar dropdown ao clicar fora
+if (typeof window !== 'undefined') {
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.relative')) {
+      showNotifications.value = false
+    }
+  })
+}
 </script>
+
+<style scoped>
+.dropdown-enter-active {
+  animation: slideDown 0.3s ease-out;
+}
+
+.dropdown-leave-active {
+  animation: slideDown 0.2s ease-in reverse;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+</style>
