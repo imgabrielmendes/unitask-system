@@ -1,7 +1,7 @@
 <!-- src\components\ui\InputText.vue -->
 <template>
   <div class="mb-4">
-    <label :for="id" class="block text-sm font-medium text-gray-700">
+    <label v-if="label" :for="id" class="block text-sm font-medium text-gray-300 mb-2">
       {{ label }}
     </label>
     <input
@@ -10,7 +10,8 @@
       :value="modelValue"
       @input="onInput"
       :placeholder="placeholder"
-      class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      :class="['w-full bg-[var(--gray-800)] border border-[var(--gray-700)] rounded-lg px-4 py-2.5 text-white placeholder:text-gray-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all', inputClass]"
+      :disabled="disabled"
     />
   </div>
 </template>
@@ -18,19 +19,30 @@
 <script setup>
 const props = defineProps({
   id: String,
-  label: String,
   modelValue: String,
+  placeholder: String,
+  label: String,
   type: {
     type: String,
-    default: 'text',
+    default: 'text'
   },
-  placeholder: String,
+  inputClass: {
+    type: String,
+    default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const emit = defineEmits(['update:modelValue'])
 
-function onInput(event) {
-  emit('update:modelValue', event.target.value)
+function onInput(e) {
+  emit('update:modelValue', e.target.value)
 }
 </script>
 
+<style scoped>
+/* Estilos customizados para inputs */
+</style>

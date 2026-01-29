@@ -9,6 +9,9 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import LoginRegisterPage from '../pages/LoginRegisterPage.vue'
 import LoginRegisterLayoult from '@/layouts/LoginRegisterLayoult.vue'
 
+// Design System Page
+import DesignSystemPage from '@/pages/DesignSystemPage.vue'
+
 const routes = [
   {
     path: '/',
@@ -35,6 +38,18 @@ const routes = [
         path: 'user',
         name: 'Profile',
         component: HomePage
+      }
+    ]
+  },
+
+  {
+    path: '/design-system',
+    component: DefaultLayout,
+    children: [
+      {
+        path: '',
+        name: 'DesignSystem',
+        component: DesignSystemPage
       }
     ]
   },
