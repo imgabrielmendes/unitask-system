@@ -30,10 +30,10 @@
         
         <!-- Empty State para favoritos -->
         <EmptyState 
-          v-if="!isLoadingTeams && favoritesTasks.length === 0"
+          v-if="tarefas.length === 0 && !isLoadingTeams"
           icon="fa-solid fa-star"
-          title="Nenhuma tarefa favorita"
-          description="Marque suas tarefas importantes como favoritas para vê-las aqui."
+          title="Nenhuma tarefa encontrada"
+          description="Crie sua primeira tarefa para começar a organizar seu trabalho."
         />
       </section>
 
@@ -158,8 +158,15 @@ export default {
       return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
     },
     favoritesTasks() {
-      // Filtra apenas as tarefas favoritas
-      return this.tarefas.filter(task => task.is_favorite || task.favorite)
+      // Filtra tarefas favoritas, se não houver, exibe as 3 primeiras
+      const favorites = this.tarefas.filter(task => task.is_favorite || task.favorite)
+      
+      if (favorites.length > 0) {
+        return favorites.slice(0, 3)
+      }
+      
+      // Se não houver favoritas, retorna as 3 primeiras tarefas
+      return this.tarefas.slice(0, 3)
     }
   },
 
@@ -178,6 +185,7 @@ export default {
       try {
         const responseTask = await gettarefas()
         this.tarefas = responseTask.data
+        console.log('Tasks recebidas:', this.tarefas)
       } catch (error) {
         console.error('Erro ao buscar tarefas:', error)
         this.tarefas = []
