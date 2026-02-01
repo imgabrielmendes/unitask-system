@@ -1,12 +1,12 @@
 <template>
-  <header class="bg-[var(--gray-900)] border-b border-[var(--gray-800)] shadow-lg flex items-center justify-between px-8 py-4 transition-all duration-300">
+  <header class="bg-[var(--gray-900)] border-b border-[var(--gray-800)] shadow-lg flex items-center justify-between px-4 md:px-8 py-3 md:py-4 transition-all duration-300">
     <!-- Botão Criar -->
-    <button class="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-green-600 text-white px-4 py-2 rounded-lg hover:from-teal-500 hover:to-green-500 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105" @click="$emit('create')">
+    <button class="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-green-600 text-white px-3 md:px-4 py-2 rounded-lg hover:from-teal-500 hover:to-green-500 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105" @click="showCreateModal = true">
       <i class="fa-solid fa-plus"></i>
-      <span>Criar</span>
+      <span class="hidden sm:inline">Criar</span>
     </button>
     <!-- Barra de pesquisa central -->
-    <div class="flex-1 flex justify-center">
+    <div class="flex-1 flex justify-center mx-2 md:mx-4">
       <div class="relative w-full max-w-md">
         <input
           type="text"
@@ -19,9 +19,9 @@
       </div>
     </div>
     <!-- Ações da direita -->
-    <div class="flex items-center gap-3 ml-4">
-      <!-- Notificações -->
-      <div class="relative">
+    <div class="flex items-center gap-2 md:gap-3">
+      <!-- Notificações - oculto em mobile -->
+      <div class="relative hidden md:block">
         <button 
           @click="toggleNotifications" 
           class="relative bg-[var(--gray-800)] text-white p-2 rounded-full hover:bg-[var(--gray-700)] transition-all duration-200 hover:scale-110"
@@ -112,6 +112,28 @@
         </transition>
       </div>
     </div>
+
+    <!-- Modal de Criação -->
+    <CreateModal 
+      v-model:open="showCreateModal"
+      @create-task="handleCreateTask"
+      @create-team="handleCreateTeam"
+    />
+
+    <!-- Modal de Criar Tarefa -->
+    <CreateTaskModal
+      v-model:open="isCreateTaskOpen"
+      :projects="[]"
+      :teams="[]"
+      :loading="false"
+      :error="''"
+      @submit="handleTaskSubmit"
+    />
+
+    <!-- Modal de Criar Time -->
+    <CreateTeamModal
+      v-model:open="isCreateTeamOpen"
+    />
   </header>
 </template>
 
@@ -119,11 +141,17 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { logout } from '@/services/authService'
+import CreateModal from '@/components/common/CreateModal.vue'
+import CreateTaskModal from '@/components/tasks/forms/CreateTaskModal.vue'
+import CreateTeamModal from '@/components/teams/CreateTeamModal.vue'
 
 const router = useRouter()
 const search = ref('')
 const showNotifications = ref(false)
 const showProfile = ref(false)
+const showCreateModal = ref(false)
+const isCreateTaskOpen = ref(false)
+const isCreateTeamOpen = ref(false)
 
 const notifications = ref([
   { title: 'Nova tarefa atribuída', message: 'Você foi adicionado à tarefa "Revisar código"', time: '5 min atrás' },
@@ -143,6 +171,21 @@ function handleLogout() {
   logout()
   showProfile.value = false
   router.push('/login')
+}
+
+function handleCreateTask() {
+  isCreateTaskOpen.value = true
+}
+
+function handleCreateTeam() {
+  isCreateTeamOpen.value = true
+}
+
+function handleTaskSubmit(payload) {
+  console.log('Criar tarefa:', payload)
+  isCreateTaskOpen.value = false
+  // Recarregar dados ou navegar
+  window.location.reload()
 }
 
 // Fechar dropdown ao clicar fora

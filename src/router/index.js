@@ -13,6 +13,7 @@ import DesignSystemPage from '@/pages/DesignSystemPage.vue'
 import TeamsPage from '@/pages/TeamsPage.vue'
 import TasksPage from '@/pages/TasksPage.vue'
 import ApiDocsPage from '@/pages/ApiDocsPage.vue'
+import TeamPage from '@/pages/TeamPage.vue'
 
 const routes = [
   {
@@ -64,6 +65,18 @@ const routes = [
         path: '',
         name: 'Teams',
         component: TeamsPage
+      }
+    ]
+  },
+
+  {
+    path: '/team/:slug',
+    component: DefaultLayout,
+    children: [
+      {
+        path: '',
+        name: 'Team',
+        component: TeamPage
       }
     ]
   },
