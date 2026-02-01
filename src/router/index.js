@@ -11,6 +11,10 @@ import LoginRegisterLayoult from '@/layouts/LoginRegisterLayoult.vue'
 
 // Design System Page
 import DesignSystemPage from '@/pages/DesignSystemPage.vue'
+// Teams Page
+import TeamsPage from '@/pages/TeamsPage.vue'
+// Tasks Page
+import TasksPage from '@/pages/TasksPage.vue'
 
 const routes = [
   {
@@ -50,6 +54,30 @@ const routes = [
         path: '',
         name: 'DesignSystem',
         component: DesignSystemPage
+      }
+    ]
+  },
+
+  {
+    path: '/teams',
+    component: DefaultLayout,
+    children: [
+      {
+        path: '',
+        name: 'Teams',
+        component: TeamsPage
+      }
+    ]
+  },
+
+  {
+    path: '/tasks',
+    component: DefaultLayout,
+    children: [
+      {
+        path: '',
+        name: 'Tasks',
+        component: TasksPage
       }
     ]
   },

@@ -1,10 +1,18 @@
 <template>
   <header class="header-bar">
-    <!-- Botão criar -->
+    <!-- Botão criar tarefa -->
     <button class="header-create-btn" @click="$emit('create')">
       <i class="fa-solid fa-plus"></i>
       <span>Criar</span>
     </button>
+    
+    <!-- Botão criar equipe -->
+    <button class="header-create-btn ml-2" @click="showCreateTeam = true">
+      <i class="fa-solid fa-users"></i>
+      <span>Criar Time</span>
+    </button>
+
+    <CreateTeamModal v-if="showCreateTeam" @close="showCreateTeam = false" @create="onCreateTeam" />
     <!-- Barra de pesquisa central -->
     <div class="header-search">
       <input
@@ -25,7 +33,14 @@
 
 <script setup>
 import { ref } from 'vue'
+import CreateTeamModal from '@/components/teams/CreateTeamModal.vue'
 const search = ref('')
+const showCreateTeam = ref(false)
+function onCreateTeam(team) {
+  // Aqui você pode adicionar lógica para lidar com a criação do time
+  // Exemplo: emitir evento, chamar API, etc.
+  // console.log('Equipe criada:', team)
+}
 </script>
 
 <style scoped>
