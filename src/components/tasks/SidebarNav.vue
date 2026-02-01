@@ -68,6 +68,19 @@
         <!-- Divider -->
         <div class="my-3 border-t border-[var(--gray-800)]"></div>
 
+        <!-- API Docs -->
+        <router-link 
+          to="/api-docs" 
+          class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-900/30 transition text-gray-300"
+          active-class="bg-teal-900/30 text-teal-400"
+        >
+          <i class="fa-solid fa-book text-lg"></i>
+          <span v-if="expanded" class="font-medium">API Docs</span>
+        </router-link>
+
+        <!-- Divider -->
+        <div class="my-3 border-t border-[var(--gray-800)]"></div>
+
         <!-- Design System -->
         <router-link 
           to="/design-system" 
