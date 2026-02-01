@@ -7,6 +7,8 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
 //src\layouts\LoginRegisterLayoult.vue
 import LoginRegisterPage from '../pages/LoginRegisterPage.vue'
+import RegisterPage from '../pages/RegisterPage.vue'
+import ForgotPasswordPage from '../pages/ForgotPasswordPage.vue'
 import LoginRegisterLayoult from '@/layouts/LoginRegisterLayoult.vue'
 
 // Design System Page
@@ -97,6 +99,25 @@ const routes = [
   {
     path: '/register',
     component: LoginRegisterLayoult,
+    children: [
+      {
+        path: '',
+        name: 'Register',
+        component: RegisterPage
+      }
+    ]
+  },
+
+  {
+    path: '/forgot-password',
+    component: LoginRegisterLayoult,
+    children: [
+      {
+        path: '',
+        name: 'ForgotPassword',
+        component: ForgotPasswordPage
+      }
+    ]
   }
   
 ]
@@ -105,6 +126,25 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+// Guard de autenticação
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  const publicPages = ['/login', '/register', '/forgot-password']
+  const authRequired = !publicPages.includes(to.path)
+
+  // Se a rota requer autenticação e não há token, redireciona para login
+  if (authRequired && !token) {
+    return next('/login')
+  }
+
+  // Se está autenticado e tenta acessar login/register, redireciona para home
+  if (token && publicPages.includes(to.path)) {
+    return next('/home')
+  }
+
+  next()
 })
 
 export default router

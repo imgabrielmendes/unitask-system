@@ -118,6 +118,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { logout } from '@/services/authService'
 
 const router = useRouter()
 const search = ref('')
@@ -134,11 +135,22 @@ function toggleNotifications() {
   showNotifications.value = !showNotifications.value
 }
 
+function toggleProfile() {
+  showProfile.value = !showProfile.value
+}
+
+function handleLogout() {
+  logout()
+  showProfile.value = false
+  router.push('/login')
+}
+
 // Fechar dropdown ao clicar fora
 if (typeof window !== 'undefined') {
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.relative')) {
       showNotifications.value = false
+      showProfile.value = false
     }
   })
 }

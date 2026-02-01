@@ -4,14 +4,14 @@
       <!-- Logo e Título -->
       <div class="auth-header">
         <div class="logo-container">
-          <i class="fa-solid fa-clipboard-check text-4xl text-teal-400"></i>
+          <i class="fa-solid fa-key text-4xl text-teal-400"></i>
         </div>
-        <h1 class="text-3xl font-bold text-white mb-2">Bem-vindo de volta!</h1>
-        <p class="text-gray-400">Entre com suas credenciais para continuar</p>
+        <h1 class="text-3xl font-bold text-white mb-2">Recuperar senha</h1>
+        <p class="text-gray-400">Enviaremos um link de recuperação para seu email</p>
       </div>
 
       <!-- Formulário -->
-      <form @submit="handleSubmit" class="auth-form">
+      <form @submit="handleSubmit" class="auth-form" v-if="!emailSent">
         <div class="input-group">
           <label class="input-label">Email</label>
           <div class="input-wrapper">
@@ -26,45 +26,35 @@
           </div>
         </div>
 
-        <div class="input-group">
-          <label class="input-label">Senha</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-lock input-icon"></i>
-            <input
-              v-model="password"
-              type="password"
-              class="input-field"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="flex justify-end mb-6">
-          <router-link to="/forgot-password" class="text-sm text-teal-400 hover:text-teal-300 transition-colors">
-            Esqueceu a senha?
-          </router-link>
-        </div>
-
         <button type="submit" class="btn-primary" :disabled="isLoading">
-          <span v-if="!isLoading">Entrar</span>
+          <span v-if="!isLoading">Enviar link de recuperação</span>
           <span v-else class="flex items-center justify-center gap-2">
             <i class="fa-solid fa-spinner fa-spin"></i>
-            Entrando...
+            Enviando...
           </span>
         </button>
 
-        <div class="divider">
-          <span>ou</span>
-        </div>
-
-        <p class="text-center text-gray-400 text-sm">
-          Não tem uma conta?
-          <router-link to="/register" class="text-teal-400 hover:text-teal-300 font-semibold transition-colors">
-            Cadastre-se
+        <div class="mt-6">
+          <router-link to="/login" class="text-center block text-gray-400 hover:text-teal-400 text-sm transition-colors">
+            <i class="fa-solid fa-arrow-left mr-2"></i>
+            Voltar para login
           </router-link>
-        </p>
+        </div>
       </form>
+
+      <!-- Mensagem de sucesso -->
+      <div v-else class="success-message">
+        <div class="success-icon">
+          <i class="fa-solid fa-check text-4xl text-green-400"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Email enviado!</h3>
+        <p class="text-gray-400 mb-6 text-center">
+          Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
+        </p>
+        <router-link to="/login" class="btn-primary inline-block text-center">
+          Voltar para login
+        </router-link>
+      </div>
     </div>
 
     <!-- Elementos decorativos animados -->
@@ -78,23 +68,24 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { login } from '@/services/authService'
+import api from '@/axios'
 
 const email = ref('')
-const password = ref('')
 const isLoading = ref(false)
-const router = useRouter()
+const emailSent = ref(false)
 
 async function handleSubmit(event) {
   event.preventDefault()
   isLoading.value = true
   
   try {
-    await login(email, password)
-    router.push('/home')
+    await api.post('/forgot-password', {
+      email: email.value
+    })
+    
+    emailSent.value = true
   } catch (error) {
-    alert('Erro ao fazer login: ' + (error.response?.data?.message || error.message))
+    alert('Erro ao enviar email: ' + (error.response?.data?.message || error.message))
   } finally {
     isLoading.value = false
   }
@@ -148,6 +139,23 @@ async function handleSubmit(event) {
 
 .auth-form {
   animation: fadeIn 1s ease-out 0.2s both;
+}
+
+.success-message {
+  text-align: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  animation: scaleIn 0.5s ease-out;
 }
 
 .input-group {
@@ -209,6 +217,8 @@ async function handleSubmit(event) {
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+  text-decoration: none;
+  display: block;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -223,26 +233,6 @@ async function handleSubmit(event) {
 .btn-primary:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 1.5rem 0;
-  color: #6b7280;
-  font-size: 0.875rem;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid rgba(107, 114, 128, 0.3);
-}
-
-.divider span {
-  padding: 0 1rem;
 }
 
 .floating-shapes {
@@ -314,6 +304,17 @@ async function handleSubmit(event) {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 

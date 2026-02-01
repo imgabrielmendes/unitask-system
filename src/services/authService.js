@@ -14,3 +14,13 @@ export async function login(email, password) {
     console.log('TOKEN:', response.data.token);
 
 }
+
+export function logout() {
+  // Remove o token do localStorage
+  localStorage.removeItem('token');
+}
+
+export function isAuthenticated() {
+  // Verifica se existe um token no localStorage
+  return !!localStorage.getItem('token');
+}
