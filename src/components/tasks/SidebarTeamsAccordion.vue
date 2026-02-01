@@ -7,8 +7,8 @@
     </button>
     <transition name="fade">
       <ul v-show="show && expanded" class="pl-8 pr-2 mt-1 space-y-1">
-        <li v-for="team in teams" :key="team.id">
-          <router-link :to="`/team/${team.id}`" class="flex items-center gap-2 px-2 py-2 rounded hover:bg-teal-900/20 text-gray-300">
+        <li v-for="team in teams" :key="team.slug || team.id">
+          <router-link :to="`/team/${team.slug || team.id}`" class="flex items-center gap-2 px-2 py-2 rounded hover:bg-teal-900/20 text-gray-300">
             <i class="fa-solid fa-circle text-xs" :style="{ color: team.color || '#14b8a6' }"></i>
             <span class="truncate">{{ team.name }}</span>
           </router-link>

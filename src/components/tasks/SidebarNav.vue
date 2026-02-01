@@ -1,8 +1,9 @@
 <template>
+  <!-- Desktop Sidebar -->
   <aside 
     @mouseenter="expand" 
     @mouseleave="collapse"
-    :class="['fixed left-0 top-0 h-screen z-30 bg-[var(--gray-900)] border-r border-[var(--gray-800)] flex flex-col transition-all duration-300', expanded ? 'w-64' : 'w-20']"
+    :class="['sidebar-desktop fixed left-0 top-0 h-screen z-30 bg-[var(--gray-900)] border-r border-[var(--gray-800)] flex flex-col transition-all duration-300', expanded ? 'w-64' : 'w-20']"
   >
     <!-- Topo: Logo verde -->
     <div class="flex items-center justify-between p-4 border-b border-[var(--gray-800)]">
@@ -110,6 +111,61 @@
     </div>
   </aside>
 
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav fixed bottom-0 left-0 right-0 z-40 bg-[var(--gray-900)]/95 backdrop-blur-lg border-t border-[var(--gray-800)] px-4 pb-safe shadow-2xl">
+    <div class="flex items-center justify-around h-16">
+      <!-- Home -->
+      <router-link 
+        to="/home" 
+        class="flex flex-col items-center justify-center min-w-0 px-2 py-1 text-gray-400 hover:text-teal-400 transition"
+        active-class="text-teal-400"
+      >
+        <i class="fa-solid fa-house text-xl mb-1"></i>
+        <span class="text-xs font-medium">Home</span>
+      </router-link>
+
+      <!-- Tasks -->
+      <router-link 
+        to="/tasks" 
+        class="flex flex-col items-center justify-center min-w-0 px-2 py-1 text-gray-400 hover:text-teal-400 transition"
+        active-class="text-teal-400"
+      >
+        <i class="fa-solid fa-list-check text-xl mb-1"></i>
+        <span class="text-xs font-medium">Tarefas</span>
+      </router-link>
+
+      <!-- Teams -->
+      <router-link 
+        to="/teams" 
+        class="flex flex-col items-center justify-center min-w-0 px-2 py-1 text-gray-400 hover:text-teal-400 transition"
+        active-class="text-teal-400"
+      >
+        <i class="fa-solid fa-users text-xl mb-1"></i>
+        <span class="text-xs font-medium">Times</span>
+      </router-link>
+
+      <!-- API Docs -->
+      <router-link 
+        to="/api-docs" 
+        class="flex flex-col items-center justify-center min-w-0 px-2 py-1 text-gray-400 hover:text-teal-400 transition"
+        active-class="text-teal-400"
+      >
+        <i class="fa-solid fa-book text-xl mb-1"></i>
+        <span class="text-xs font-medium">Docs</span>
+      </router-link>
+
+      <!-- Profile -->
+      <router-link 
+        to="/profile" 
+        class="flex flex-col items-center justify-center min-w-0 px-2 py-1 text-gray-400 hover:text-teal-400 transition"
+        active-class="text-teal-400"
+      >
+        <i class="fa-solid fa-user text-xl mb-1"></i>
+        <span class="text-xs font-medium">Perfil</span>
+      </router-link>
+    </div>
+  </nav>
+
 </template>
 
 <script setup>
@@ -143,6 +199,30 @@ function toggleTeams() {
 </script>
 
 <style scoped>
+/* Desktop Sidebar - visível apenas em telas grandes */
+.sidebar-desktop {
+  display: flex;
+}
+
+/* Mobile Bottom Nav - oculto por padrão */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* Media query para tablets e mobile */
+@media (max-width: 768px) {
+  /* Oculta sidebar desktop */
+  .sidebar-desktop {
+    display: none !important;
+  }
+  
+  /* Mostra bottom navigation */
+  .mobile-bottom-nav {
+    display: block;
+  }
+}
+
+/* Animações existentes */
 .fade-enter-active, .fade-leave-active {
   transition: all 0.3s ease;
 }
@@ -178,5 +258,24 @@ aside a:hover, aside button:hover {
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Espaçamento seguro para notch/home indicator em iOS */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-bottom-nav {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+  }
+}
+
+/* Active state para bottom nav */
+.mobile-bottom-nav a.router-link-active {
+  color: #14b8a6;
+}
+
+/* Animação de tap para mobile */
+@media (max-width: 768px) {
+  .mobile-bottom-nav a:active {
+    transform: scale(0.95);
+  }
 }
 </style>
