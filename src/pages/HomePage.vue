@@ -28,9 +28,14 @@
           </div>
         </transition-group>
         
+        <!-- Loading State para favoritos -->
+        <div v-if="isLoadingTasks" class="flex items-center justify-center py-12">
+          <i class="fa-solid fa-spinner fa-spin text-4xl text-teal-400"></i>
+        </div>
+
         <!-- Empty State para favoritos -->
         <EmptyState 
-          v-if="tarefas.length === 0 && !isLoadingTeams"
+          v-else-if="tarefas.length === 0"
           icon="fa-solid fa-star"
           title="Nenhuma tarefa encontrada"
           description="Crie sua primeira tarefa para começar a organizar seu trabalho."
@@ -116,9 +121,8 @@
 </template>
 
 <script>
-import {createTask, gettarefas } from '@/services/taskService.js'
-import { getAllProjects, getAllTeams } from '@/services/homeService.js'
-import { getTeams } from '@/services/teamService.js'
+import { createTask } from '@/services/taskService.js'
+import { getAllProjects, getAllTeams, getHome } from '@/services/homeService.js'
 
 import TaskList from '@/components/tasks/TaskList.vue'
 import CreateTaskModal from '@/components/tasks/forms/CreateTaskModal.vue'
@@ -144,6 +148,7 @@ export default {
       teamOptions: [],
       teams: [],
       isLoadingTeams: false,
+      isLoadingTasks: false,
 
       isCreateOpen: false,
       isCreating: false,
@@ -172,23 +177,30 @@ export default {
 
   async mounted() {
     await Promise.all([
-      this.fetchTasks(), 
-      this.fetchProjects(), 
-      this.fetchTeams(),
-      this.fetchTeamsData()
+      this.fetchHomeData(),
+      this.fetchProjects(),
+      this.fetchTeams()
     ])
   },
 
   methods: {
     
-    async fetchTasks() {
+    async fetchHomeData() {
+      this.isLoadingTasks = true;
+      this.isLoadingTeams = true;
       try {
-        const responseTask = await gettarefas()
-        this.tarefas = responseTask.data
-        console.log('Tasks recebidas:', this.tarefas)
+        const response = await getHome();
+        const data = response?.data || {};
+        this.tarefas = Array.isArray(data.tasks) ? data.tasks : [];
+        this.teams = Array.isArray(data.teams) ? data.teams : [];
+        // Se quiser usar user futuramente: this.user = data.user || null;
       } catch (error) {
-        console.error('Erro ao buscar tarefas:', error)
-        this.tarefas = []
+        console.error('Erro ao buscar dados da home:', error);
+        this.tarefas = [];
+        this.teams = [];
+      } finally {
+        this.isLoadingTasks = false;
+        this.isLoadingTeams = false;
       }
     },
 

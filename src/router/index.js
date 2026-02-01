@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-// src/pages/HomePage.vue
 import HomePage from '@/pages/HomePage.vue'
-// src/layouts/DefaultLayout.vue
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
 //src\layouts\LoginRegisterLayoult.vue
@@ -11,12 +9,10 @@ import RegisterPage from '../pages/RegisterPage.vue'
 import ForgotPasswordPage from '../pages/ForgotPasswordPage.vue'
 import LoginRegisterLayoult from '@/layouts/LoginRegisterLayoult.vue'
 
-// Design System Page
 import DesignSystemPage from '@/pages/DesignSystemPage.vue'
-// Teams Page
 import TeamsPage from '@/pages/TeamsPage.vue'
-// Tasks Page
 import TasksPage from '@/pages/TasksPage.vue'
+import ApiDocsPage from '@/pages/ApiDocsPage.vue'
 
 const routes = [
   {
@@ -80,6 +76,18 @@ const routes = [
         path: '',
         name: 'Tasks',
         component: TasksPage
+      }
+    ]
+  },
+
+  {
+    path: '/api-docs',
+    component: DefaultLayout,
+    children: [
+      {
+        path: '',
+        name: 'ApiDocs',
+        component: ApiDocsPage
       }
     ]
   },

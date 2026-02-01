@@ -24,8 +24,14 @@
         </button>
       </div>
 
+      <!-- Loading State -->
+      <div v-if="isLoading" class="flex flex-col items-center justify-center py-16">
+        <i class="fa-solid fa-spinner fa-spin text-6xl text-teal-400 mb-4"></i>
+        <p class="text-gray-400">Carregando tarefas...</p>
+      </div>
+
       <!-- Lista de Tarefas -->
-      <div v-if="tasks.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else-if="tasks.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div 
           v-for="task in filteredTasks" 
           :key="task.id"
@@ -58,7 +64,7 @@
       </div>
 
       <!-- Estado vazio -->
-      <div v-else class="flex flex-col items-center justify-center py-16">
+      <div v-else-if="!isLoading" class="flex flex-col items-center justify-center py-16">
         <div class="bg-[var(--gray-900)] border border-[var(--gray-700)] rounded-xl p-12 text-center">
           <i class="fa-solid fa-list-check text-6xl text-gray-600 mb-4"></i>
           <h3 class="text-xl font-bold text-white mb-2">Nenhuma tarefa encontrada</h3>
@@ -74,6 +80,8 @@
 </template>
 
 <script>
+import { getTarefas } from '@/services/taskService.js'
+
 export default {
   name: 'TasksPage',
   data() {
@@ -85,26 +93,12 @@ export default {
         { label: 'Em Progresso', value: 'in_progress' },
         { label: 'Concluídas', value: 'done' }
       ],
-      tasks: [
-        // Exemplo de tarefas (substitua com dados reais da API)
-        {
-          id: 1,
-          title: 'Implementar autenticação',
-          description: 'Criar sistema de login e registro de usuários',
-          status: 'in_progress',
-          priority: 'high',
-          dueDate: '15/02/2026'
-        },
-        {
-          id: 2,
-          title: 'Design do dashboard',
-          description: 'Criar wireframes e protótipos do dashboard principal',
-          status: 'pending',
-          priority: 'medium',
-          dueDate: '20/02/2026'
-        }
-      ]
+      tasks: [],
+      isLoading: false
     };
+  },
+  async mounted() {
+    await this.fetchTasks();
   },
   computed: {
     filteredTasks() {
@@ -115,6 +109,18 @@ export default {
     }
   },
   methods: {
+    async fetchTasks() {
+      this.isLoading = true;
+      try {
+        const response = await getTarefas();
+        this.tasks = response?.data || [];
+      } catch (error) {
+        console.error('Erro ao buscar tarefas:', error);
+        this.tasks = [];
+      } finally {
+        this.isLoading = false;
+      }
+    },
     getStatusClass(status) {
       const classes = {
         'done': 'bg-green-700/80 text-green-300',
