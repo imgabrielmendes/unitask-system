@@ -4,14 +4,28 @@
       <!-- Logo e Título -->
       <div class="auth-header">
         <div class="logo-container">
-          <i class="fa-solid fa-clipboard-check text-4xl text-teal-400"></i>
+          <i class="fa-solid fa-user-plus text-4xl text-teal-400"></i>
         </div>
-        <h1 class="text-3xl font-bold text-white mb-2">Bem-vindo de volta!</h1>
-        <p class="text-gray-400">Entre com suas credenciais para continuar</p>
+        <h1 class="text-3xl font-bold text-white mb-2">Crie sua conta</h1>
+        <p class="text-gray-400">Comece a gerenciar suas tarefas agora</p>
       </div>
 
       <!-- Formulário -->
       <form @submit="handleSubmit" class="auth-form">
+        <div class="input-group">
+          <label class="input-label">Nome completo</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input
+              v-model="name"
+              type="text"
+              class="input-field"
+              placeholder="Seu nome"
+              required
+            />
+          </div>
+        </div>
+
         <div class="input-group">
           <label class="input-label">Email</label>
           <div class="input-wrapper">
@@ -40,17 +54,25 @@
           </div>
         </div>
 
-        <div class="flex justify-end mb-6">
-          <router-link to="/forgot-password" class="text-sm text-teal-400 hover:text-teal-300 transition-colors">
-            Esqueceu a senha?
-          </router-link>
+        <div class="input-group">
+          <label class="input-label">Confirmar senha</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input
+              v-model="passwordConfirmation"
+              type="password"
+              class="input-field"
+              placeholder="••••••••"
+              required
+            />
+          </div>
         </div>
 
         <button type="submit" class="btn-primary" :disabled="isLoading">
-          <span v-if="!isLoading">Entrar</span>
+          <span v-if="!isLoading">Criar conta</span>
           <span v-else class="flex items-center justify-center gap-2">
             <i class="fa-solid fa-spinner fa-spin"></i>
-            Entrando...
+            Criando...
           </span>
         </button>
 
@@ -59,9 +81,9 @@
         </div>
 
         <p class="text-center text-gray-400 text-sm">
-          Não tem uma conta?
-          <router-link to="/register" class="text-teal-400 hover:text-teal-300 font-semibold transition-colors">
-            Cadastre-se
+          Já tem uma conta?
+          <router-link to="/login" class="text-teal-400 hover:text-teal-300 font-semibold transition-colors">
+            Faça login
           </router-link>
         </p>
       </form>
@@ -79,22 +101,37 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { login } from '@/services/authService'
+import api from '@/axios'
 
+const name = ref('')
 const email = ref('')
 const password = ref('')
+const passwordConfirmation = ref('')
 const isLoading = ref(false)
 const router = useRouter()
 
 async function handleSubmit(event) {
   event.preventDefault()
+  
+  if (password.value !== passwordConfirmation.value) {
+    alert('As senhas não coincidem!')
+    return
+  }
+  
   isLoading.value = true
   
   try {
-    await login(email, password)
-    router.push('/home')
+    await api.post('/register', {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      password_confirmation: passwordConfirmation.value
+    })
+    
+    alert('Conta criada com sucesso! Faça login para continuar.')
+    router.push('/login')
   } catch (error) {
-    alert('Erro ao fazer login: ' + (error.response?.data?.message || error.message))
+    alert('Erro ao criar conta: ' + (error.response?.data?.message || error.message))
   } finally {
     isLoading.value = false
   }
@@ -209,6 +246,7 @@ async function handleSubmit(event) {
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+  margin-top: 0.5rem;
 }
 
 .btn-primary:hover:not(:disabled) {
