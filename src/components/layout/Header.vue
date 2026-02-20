@@ -5,6 +5,11 @@
       <i class="fa-solid fa-plus"></i>
       <span>Criar</span>
     </button>
+
+    <button class="header-create-btn" @click="$emit('create-colleague')">
+      <i class="fa-solid fa-plus"></i>
+      <i class="fa-solid fa-user"></i>
+    </button>
     
     <!-- Botão criar equipe -->
     <button class="header-create-btn ml-2" @click="showCreateTeam = true">

@@ -55,7 +55,7 @@
         <transition-group name="list" tag="div" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <TeamCard 
             v-for="team in teams" 
-            :key="team.id"
+            :key="team.slug || team.id"
             :name="team.name"
             :color="team.color"
             :icon="team.icon"
@@ -190,7 +190,7 @@ export default {
       this.isLoadingTeams = true;
       try {
         const response = await getHome();
-        const data = response?.data || {};
+        const data = response?.data?.data || {};
         this.tarefas = Array.isArray(data.tasks) ? data.tasks : [];
         this.teams = Array.isArray(data.teams) ? data.teams : [];
         // Se quiser usar user futuramente: this.user = data.user || null;
@@ -204,14 +204,11 @@ export default {
       }
     },
 
-    handleClick() {
-      alert('Botão clicado!')
-    },
-
     async fetchProjects() {
 
       const response = await getAllProjects()
-      const projects_dados = response?.data ?? []
+
+      const projects_dados = response?.data?.data || response?.data || []
 
         this.projectOptions = Array.isArray(projects_dados)
           ? projects_dados.map((p) => ({
@@ -223,7 +220,8 @@ export default {
 
     async fetchTeams() {
       const response = await getAllTeams()
-      const teams_dados = response?.data ?? []
+
+      const teams_dados = response?.data?.data || response?.data || []
           this.teamOptions = Array.isArray(teams_dados)
 
             ? teams_dados.map((team_array) => ({
@@ -240,11 +238,15 @@ export default {
     async fetchTeamsData() {
       this.isLoadingTeams = true
       try {
+        
         const response = await getTeams()
-        this.teams = response?.data ?? []
+        this.teams = response?.data?.data || response?.data || []
+
       } catch (error) {
+
         console.error('Erro ao buscar times:', error)
         this.teams = []
+
       } finally {
         this.isLoadingTeams = false
       }

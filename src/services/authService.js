@@ -11,8 +11,17 @@ export async function login(email, password) {
     const token = response.data.token;
     localStorage.setItem('token', token);
 
-    console.log('TOKEN:', response.data.token);
+    //console.log('TOKEN:', response.data.token);
 
+}
+
+export async function register(name, email, password) {
+  const response = await api.post('/register', {
+    name: name.value,
+    email: email.value,
+    password: password.value
+  });
+  return response.data;
 }
 
 export function logout() {

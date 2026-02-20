@@ -1,5 +1,11 @@
 <template>
-  <div class="flex items-center bg-[var(--gray-850)] border border-[var(--gray-700)] rounded-xl p-5 shadow hover:shadow-lg transition min-h-[90px]">
+  <div class="
+  flex items-center 
+  bg-[var(--gray-850)] border border-[var(--gray-700)] 
+  rounded-xl p-5 
+  shadow hover:shadow-lg 
+  transition min-h-[90px]">
+  
     <!-- Ícone em quadrado -->
     <div class="flex items-center justify-center w-14 h-14 rounded-lg bg-gradient-to-br from-teal-500 to-green-600 mr-4">
       <i class="fa-solid fa-diagram-project text-2xl text-white"></i>

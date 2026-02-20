@@ -42,13 +42,11 @@
             id="task-project"
             :options="projects"
             v-model="projectId"
-            class="flex-1"
           />
           <SelectInput
             id="task-team"
-            :options="teams"
+            :options="teamOptions"
             v-model="teamId"
-            class="flex-1"
           />
           <SelectInput
             id="task-priority"
@@ -69,18 +67,25 @@
             />
           </div>
         </div>
+
         <p v-if="error" class="mt-4 text-sm text-red-400 bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20 flex items-center gap-2">
           <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
         </p>
+
         <div class="mt-8 flex justify-end gap-3">
+
           <BaseButton variant="secondary" :disabled="loading" @click="onClose">
             <i class="fa-solid fa-xmark mr-2"></i> <span class="text-white">Cancelar</span>
           </BaseButton>
+
           <BaseButton variant="primary" :disabled="loading" @click="onSubmit">
             <i class="fa-solid fa-floppy-disk mr-2"></i> <span class="text-white">{{ loading ? 'Salvando...' : 'Salvar' }}</span>
           </BaseButton>
+
         </div>
+
       </DialogPanel>
+
     </div>
   </Dialog>
 </template>
@@ -88,11 +93,39 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
+
 import InputText from '@/components/ui/InputText.vue'
 import SelectInput from '@/components/ui/SelectInput.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import TitleInput from '@/components/ui/TitleInput.vue'
+
+import { getTeams } from '@/services/teamService.js'
+
 import '@fortawesome/fontawesome-free/css/all.min.css'
+
+async function fetchTeams() {
+
+  try {
+    const response = await getTeams()
+    const teams = response?.data?.data || response?.data || []
+    teamOptions.value = Array.isArray(teams)
+      ? teams.map(team => ({
+          value: team.id,
+          label: team.name ?? `Time #${team.id}`
+        }))
+      : []
+  } catch (e) {
+    teamOptions.value = []
+  }
+
+}
+
+const priorityOptions = [
+  { value: 'low', label: 'Baixa' },
+  { value: 'high', label: 'Alta' },
+]
+
+const teamOptions = ref([])
 
 const props = defineProps({
   open: { 
@@ -117,39 +150,33 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:open', 'submit'])
+const emit = defineEmits([
+  'update:open', 
+  'submit'
+])
 
 const title = ref('')
 const description = ref('')
 
-const status = ref('pending')
-const priority = ref('low')
+const status = ref('')
+const priority = ref('')
 
 const projectId = ref('') 
 const teamId = ref('')
 
-const statusOptions = [
-  { value: 'pending', label: 'Pendente' },
-  { value: 'done', label: 'Concluída' },
-]
-
-const priorityOptions = [
-  { value: 'low', label: 'Baixa' },
-  { value: 'high', label: 'Alta' },
-]
-
 watch(
   () => props.open,
-  (isOpen) => {
+  async (isOpen) => {
     if (isOpen) {
+
+      await fetchTeams()
 
       title.value = ''
       description.value = ''
       status.value = 'pending'
       priority.value = 'low'
-
       projectId.value = props.projects?.[0]?.value ?? ''
-      teamId.value = props.teams?.[0]?.value ?? ''
+      teamId.value = teamOptions.value?.[0]?.value ?? ''
 
     }
   }
@@ -161,15 +188,15 @@ function onClose() {
 
 function onSubmit() {
   
-  const trimmedTitle = title.value.trim()
-  const trimmedDescription = description.value.trim()
+  const tittle = title.value.trim()
+  const description = description.value.trim()
 
   emit('submit', {
     project_id: projectId.value,
     team_id: teamId.value,
 
-    title: trimmedTitle,
-    description: trimmedDescription,
+    title: tittle,
+    description: description,
     
     status: status.value,
     priority: priority.value,
