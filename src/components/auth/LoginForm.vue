@@ -19,8 +19,8 @@
               1
             </div>
             <div class="text-white">
-              <p class="font-semibold">Enter your account</p>
-              <p class="text-sm text-white/70">Use your email and password</p>
+              <p class="font-semibold">Faça login na sua conta</p>
+              <p class="text-sm text-white/70">Use suas credenciais para acessar seu workspace</p>
             </div>
           </div>
 
@@ -29,8 +29,8 @@
               2
             </div>
             <div class="text-white/90">
-              <p class="font-semibold">Access your workspace</p>
-              <p class="text-sm text-white/60">See tasks and teams instantly</p>
+              <p class="font-semibold">Acesse seu workspace</p>
+              <p class="text-sm text-white/60">Veja tarefas e times instantaneamente</p>
             </div>
           </div>
 
@@ -39,8 +39,8 @@
               3
             </div>
             <div class="text-white/90">
-              <p class="font-semibold">Start organizing</p>
-              <p class="text-sm text-white/60">Create and manage your tasks</p>
+              <p class="font-semibold">Comece a organizar</p>
+              <p class="text-sm text-white/60">Crie e gerencie suas tarefas</p>
             </div>
           </div>
         </div>
@@ -49,11 +49,11 @@
       <!-- Painel Direito (Form) -->
       <section class="p-8 md:p-10 bg-gray-950">
         <div class="max-w-md">
-          <h1 class="text-2xl font-semibold text-white">Sign In</h1>
-          <p class="mt-1 text-sm text-gray-400">Enter your personal data to continue.</p>
+          <h1 class="text-2xl font-semibold text-white">Bem vindo de volta</h1>
+          <p class="mt-1 text-sm text-gray-400">Faça login com suas credenciais para acessar seu workspace.</p>
 
           <div class="mt-6 grid grid-cols-2 gap-3">
-            <button
+            <!-- <button
               type="button"
               class="flex items-center justify-center gap-2 rounded-xl border border-gray-800 bg-gray-900/30 px-4 py-3 text-sm text-white hover:bg-gray-900/50 transition"
             >
@@ -67,7 +67,7 @@
             >
               <i class="fa-brands fa-github"></i>
               Github
-            </button>
+            </button> -->
           </div>
 
           <div class="my-6 flex items-center gap-3">
