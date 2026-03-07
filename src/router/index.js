@@ -22,8 +22,8 @@ const routes = [
     component: DefaultLayout,
     children: [
       {
-        path: 'profile',
-        name: 'Profile',
+        path: '',
+        name: 'Home',
         component: HomePage
       }
     ]
