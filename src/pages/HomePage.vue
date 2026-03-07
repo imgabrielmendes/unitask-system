@@ -175,15 +175,34 @@ export default {
 
   methods: {
     
-    async fetchHomeData() {
+    async fetchHomeData(forceRefresh = false) {
+      // Use cached data if available and not forcing a refresh
+      if (!forceRefresh) {
+        try {
+          const cached = sessionStorage.getItem('home_data')
+          if (cached) {
+            const data = JSON.parse(cached)
+            this.user = data.user || null
+            this.tarefas = Array.isArray(data.tasks) ? data.tasks : []
+            this.teams = Array.isArray(data.teams) ? data.teams : []
+            this.teamOptions = this.teams.map((team) => ({
+              value: team.slug,
+              label: team.name ?? team.slug,
+              name: team.name,
+            }))
+            this.isLoadingTasks = false
+            this.isLoadingTeams = false
+            return
+          }
+        } catch {}
+      }
+
       this.isLoadingTasks = true;
       this.isLoadingTeams = true;
       try {
         const response = await getHome();
         const data = response?.data?.data || {};
         this.user = data.user || null;
-        // Cache user for header/sidebar to consume
-        if (this.user) sessionStorage.setItem('home_user', JSON.stringify(this.user));
         this.tarefas = Array.isArray(data.tasks) ? data.tasks : [];
         this.teams = Array.isArray(data.teams) ? data.teams : [];
         this.teamOptions = this.teams.map((team) => ({
@@ -191,6 +210,10 @@ export default {
           label: team.name ?? team.slug,
           name: team.name,
         }));
+        // Cache full home payload for subsequent visits
+        sessionStorage.setItem('home_data', JSON.stringify({ user: this.user, tasks: this.tarefas, teams: this.teams }))
+        // Also keep isolated user cache for header/sidebar
+        if (this.user) sessionStorage.setItem('home_user', JSON.stringify(this.user));
       } catch (error) {
         console.error('Erro ao buscar dados da home:', error);
         this.user = null;
@@ -229,11 +252,20 @@ export default {
         if (created) {
           this.tarefas = [created, ...this.tarefas]
         } else {
-          await this.fetchHomeData()
+          await this.fetchHomeData(true)
+          return
         }
+        // Keep sessionStorage cache in sync
+        this._updateHomeCache()
       } catch (error) {
         console.error('Erro ao criar tarefa:', error)
       }
+    },
+
+    _updateHomeCache() {
+      try {
+        sessionStorage.setItem('home_data', JSON.stringify({ user: this.user, tasks: this.tarefas, teams: this.teams }))
+      } catch {}
     },
 
     // Determina se a tarefa é de alta prioridade
