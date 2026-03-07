@@ -43,6 +43,8 @@
 const navItems = [
   { to: '/', label: 'Dashboard', icon: 'fa-solid fa-house' },
   { to: '/tasks', label: 'Tarefas', icon: 'fa-solid fa-list-check' },
+  { to: '/projects', label: 'Projetos', icon: 'fa-solid fa-diagram-project' },
+  { to: '/teams', label: 'Times', icon: 'fa-solid fa-users' },
   // ...adicione mais itens
 ]
 const teams = [

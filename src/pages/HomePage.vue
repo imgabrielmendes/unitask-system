@@ -3,8 +3,7 @@
     <div class="p-8">
       <!-- Data e Saudação -->
       <div class="mb-8">
-        <p class="text-sm text-gray-400 mb-1">{{ currentDate }}</p>
-        <h1 class="text-3xl font-bold text-white">Hello $User!</h1>
+        <h1 class="text-3xl font-bold text-white">Olá, {{ user?.name ?? 'User' }}!</h1>
       </div>
 
       <!-- Seção My Favorites -->
@@ -107,13 +106,9 @@
         <i class="fa-solid fa-plus text-2xl"></i>
       </button>
 
-      <CreateTaskModal
+      <CreateModal
         v-model:open="isCreateOpen"
-        :projects="projectOptions"
-        :teams="teamOptions"
-        :loading="isCreating"
-        :error="createError"
-        @submit="handleCreateSubmit"
+        @create-task="handleCreateSubmit"
       />
 
     </div>
@@ -122,10 +117,10 @@
 
 <script>
 import { createTask } from '@/services/taskService.js'
-import { getAllProjects, getAllTeams, getHome } from '@/services/homeService.js'
+import { getHome } from '@/services/homePageService.js'
 
 import TaskList from '@/components/tasks/TaskList.vue'
-import CreateTaskModal from '@/components/tasks/forms/CreateTaskModal.vue'
+import CreateModal from '@/components/common/CreateModal.vue'
 import buttonteste from '@/components/ui/button.vue'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import TeamCard from '@/components/teams/TeamCard.vue'
@@ -135,7 +130,7 @@ export default {
   name: 'HomePage',
   components: {
     TaskList,
-    CreateTaskModal,
+    CreateModal,
     buttonteste,
     ProjectCard,
     TeamCard,
@@ -143,6 +138,7 @@ export default {
   },
   data() { return {
     
+      user: null,
       tarefas: [],
       projectOptions: [],
       teamOptions: [],
@@ -151,8 +147,6 @@ export default {
       isLoadingTasks: false,
 
       isCreateOpen: false,
-      isCreating: false,
-      createError: '',
 
     }
   },
@@ -176,11 +170,7 @@ export default {
   },
 
   async mounted() {
-    await Promise.all([
-      this.fetchHomeData(),
-      this.fetchProjects(),
-      this.fetchTeams()
-    ])
+    await this.fetchHomeData()
   },
 
   methods: {
@@ -191,48 +181,26 @@ export default {
       try {
         const response = await getHome();
         const data = response?.data?.data || {};
+        this.user = data.user || null;
+        // Cache user for header/sidebar to consume
+        if (this.user) sessionStorage.setItem('home_user', JSON.stringify(this.user));
         this.tarefas = Array.isArray(data.tasks) ? data.tasks : [];
         this.teams = Array.isArray(data.teams) ? data.teams : [];
-        // Se quiser usar user futuramente: this.user = data.user || null;
+        this.teamOptions = this.teams.map((team) => ({
+          value: team.slug,
+          label: team.name ?? team.slug,
+          name: team.name,
+        }));
       } catch (error) {
         console.error('Erro ao buscar dados da home:', error);
+        this.user = null;
         this.tarefas = [];
         this.teams = [];
+        this.teamOptions = [];
       } finally {
         this.isLoadingTasks = false;
         this.isLoadingTeams = false;
       }
-    },
-
-    async fetchProjects() {
-
-      const response = await getAllProjects()
-
-      const projects_dados = response?.data?.data || response?.data || []
-
-        this.projectOptions = Array.isArray(projects_dados)
-          ? projects_dados.map((p) => ({
-              value: p.id,
-              label: p.name ?? p.title ?? `Projeto #${p.id}`,
-            }))
-          : []
-    },
-
-    async fetchTeams() {
-      const response = await getAllTeams()
-
-      const teams_dados = response?.data?.data || response?.data || []
-          this.teamOptions = Array.isArray(teams_dados)
-
-            ? teams_dados.map((team_array) => ({
-                value: team_array.id,
-                label: team_array.name ?? `Time #${team_array.id}`,
-                id: team_array.id,
-                name: team_array.name,
-                color: team_array.color
-              }))
-
-            : []
     },
 
     async fetchTeamsData() {
@@ -253,37 +221,19 @@ export default {
     },
 
     async handleCreateSubmit(payload) {
-
-      this.createError = ''
-      if (!payload?.title) {
-        this.createError = 'Informe um título para a tarefa.'
-        return
-      }
-
-      this.isCreating = true
+      if (!payload?.title) return
 
       try {
         const response = await createTask(payload)
         const created = response?.data?.task ?? response?.data
-
         if (created) {
           this.tarefas = [created, ...this.tarefas]
-        } 
-        
-        else {
-          await this.fetchTasks()
+        } else {
+          await this.fetchHomeData()
         }
-
-        this.isCreateOpen = false
-      } 
-
-      catch (error) {
-        this.createError = error?.response?.data?.message || error?.message || 'Erro ao criar tarefa.'
-      } 
-      finally {
-        this.isCreating = false
+      } catch (error) {
+        console.error('Erro ao criar tarefa:', error)
       }
-
     },
 
     // Determina se a tarefa é de alta prioridade

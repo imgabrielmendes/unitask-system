@@ -188,15 +188,15 @@ function onClose() {
 
 function onSubmit() {
   
-  const tittle = title.value.trim()
-  const description = description.value.trim()
+  const titleVal = title.value.trim()
+  const descriptionVal = description.value.trim()
 
   emit('submit', {
     project_id: projectId.value,
     team_id: teamId.value,
 
-    title: tittle,
-    description: description,
+    title: titleVal,
+    description: descriptionVal,
     
     status: status.value,
     priority: priority.value,

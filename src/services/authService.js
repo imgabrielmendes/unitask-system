@@ -8,10 +8,9 @@ export async function login(email, password) {
     password: password.value
     });
 
-    const token = response.data.token;
+    // Backend returns [token, statusCode] array
+    const token = Array.isArray(response.data) ? response.data[0] : response.data.token;
     localStorage.setItem('token', token);
-
-    //console.log('TOKEN:', response.data.token);
 
 }
 

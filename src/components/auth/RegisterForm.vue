@@ -169,7 +169,7 @@ async function handleSubmit(event) {
   isLoading.value = true
   
   try {
-    await api.post('/register', {
+    await api.post('register', {
       name: name.value,
       email: email.value,
       password: password.value,

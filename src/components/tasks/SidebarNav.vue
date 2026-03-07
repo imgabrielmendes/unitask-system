@@ -8,9 +8,6 @@
     <!-- Topo: Logo verde -->
     <div class="flex items-center justify-between p-4 border-b border-[var(--gray-800)]">
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-gradient-to-br from-teal-400 to-green-500 rounded-lg flex items-center justify-center">
-          <i class="fa-solid fa-check text-white text-sm"></i>
-        </div>
         <span v-if="expanded" class="text-xl font-bold text-white">Unitask</span>
       </div>
     </div>
@@ -96,16 +93,16 @@
 
     <!-- Rodapé com usuário -->
     <div class="border-t border-[var(--gray-800)] p-3">
-      <router-link 
-        to="/profile" 
+      <router-link
+        to="/profile"
         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[var(--gray-800)] transition text-gray-300 hover:text-white"
       >
-        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-green-500 flex items-center justify-center">
-          <i class="fa-solid fa-user text-white text-xs"></i>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-green-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+          {{ userInitials }}
         </div>
         <div v-if="expanded" class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-white truncate">@userid</p>
-          <p class="text-xs text-gray-400 truncate">Ver perfil</p>
+          <p class="text-sm font-medium text-white truncate">{{ currentUser?.name ?? 'Usuário' }}</p>
+          <p class="text-xs text-gray-400 truncate">{{ currentUser?.email ?? 'Ver perfil' }}</p>
         </div>
       </router-link>
     </div>
@@ -169,7 +166,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import SidebarTeamsAccordion from './SidebarTeamsAccordion.vue'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
@@ -182,6 +179,19 @@ const props = defineProps({
 
 const expanded = ref(true)
 const showTeams = ref(true)
+const currentUser = ref(null)
+
+onMounted(() => {
+  try {
+    const cached = sessionStorage.getItem('home_user')
+    if (cached) currentUser.value = JSON.parse(cached)
+  } catch {}
+})
+
+const userInitials = computed(() => {
+  const name = currentUser.value?.name ?? ''
+  return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || 'U'
+})
 
 function expand() {
   expanded.value = true

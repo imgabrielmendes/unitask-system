@@ -14,6 +14,7 @@ import TeamsPage from '@/pages/TeamsPage.vue'
 import TasksPage from '@/pages/TasksPage.vue'
 import ApiDocsPage from '@/pages/ApiDocsPage.vue'
 import TeamPage from '@/pages/TeamPage.vue'
+import ProjectsPage from '@/pages/ProjectsPage.vue'
 
 const routes = [
   {
@@ -53,6 +54,18 @@ const routes = [
         path: '',
         name: 'DesignSystem',
         component: DesignSystemPage
+      }
+    ]
+  },
+
+  {
+    path: '/projects',
+    component: DefaultLayout,
+    children: [
+      {
+        path: '',
+        name: 'Projects',
+        component: ProjectsPage
       }
     ]
   },
@@ -150,17 +163,24 @@ const router = createRouter({
 })
 
 // Guard de autenticação
+const INVALID_TOKENS = ['undefined', 'null', '', null]
+
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  let token = localStorage.getItem('token')
+
+  // Clean up corrupted tokens
+  if (INVALID_TOKENS.includes(token)) {
+    localStorage.removeItem('token')
+    token = null
+  }
+
   const publicPages = ['/login', '/register', '/forgot-password']
   const authRequired = !publicPages.includes(to.path)
 
-  // Se a rota requer autenticação e não há token, redireciona para login
   if (authRequired && !token) {
     return next('/login')
   }
 
-  // Se está autenticado e tenta acessar login/register, redireciona para home
   if (token && publicPages.includes(to.path)) {
     return next('/home')
   }
