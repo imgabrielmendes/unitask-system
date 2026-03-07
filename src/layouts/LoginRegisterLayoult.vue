@@ -1,20 +1,18 @@
 <template>
-  <HeaderDynamic />
-
+  <div>
     <main>
       <router-view/>
     </main>
 
     <footerUser></footerUser>
+  </div>
 </template>
 
 <script>
-import HeaderDynamic from '@/components/tasks/HeaderDynamic.vue';
 import footerUser from '@/components/tasks/footer.vue';
 
 export default {
     components: {
-    HeaderDynamic,
         footerUser
     }
 }

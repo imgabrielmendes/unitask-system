@@ -1,77 +1,133 @@
 <template>
-  <div class="auth-container">
-    <div class="auth-card">
-      <!-- Logo e Título -->
-      <div class="auth-header">
-        <div class="logo-container">
-          <i class="fa-solid fa-clipboard-check text-4xl text-teal-400"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-white mb-2">Bem-vindo de volta!</h1>
-        <p class="text-gray-400">Entre com suas credenciais para continuar</p>
-      </div>
+  <div class="min-h-screen flex items-center justify-center px-4 py-10 bg-gray-950">
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-3xl border border-gray-800">
+      <!-- Painel Esquerdo (como na imagem) -->
+      <section class="p-8 md:p-10 bg-gradient-to-br from-teal-600 to-green-500">
+        <h2 class="text-4xl font-bold text-white leading-tight">
+          Bem vindo
+          <br />
+          de volta
+        </h2>
 
-      <!-- Formulário -->
-      <form @submit="handleSubmit" class="auth-form">
-        <div class="input-group">
-          <label class="input-label">Email</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-envelope input-icon"></i>
-            <input
-              v-model="email"
-              type="email"
-              class="input-field"
-              placeholder="seu@email.com"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label class="input-label">Senha</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-lock input-icon"></i>
-            <input
-              v-model="password"
-              type="password"
-              class="input-field"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="flex justify-end mb-6">
-          <router-link to="/forgot-password" class="text-sm text-teal-400 hover:text-teal-300 transition-colors">
-            Esqueceu a senha?
-          </router-link>
-        </div>
-
-        <button type="submit" class="btn-primary" :disabled="isLoading">
-          <span v-if="!isLoading">Entrar</span>
-          <span v-else class="flex items-center justify-center gap-2">
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            Entrando...
-          </span>
-        </button>
-
-        <div class="divider">
-          <span>ou</span>
-        </div>
-
-        <p class="text-center text-gray-400 text-sm">
-          Não tem uma conta?
-          <router-link to="/register" class="text-teal-400 hover:text-teal-300 font-semibold transition-colors">
-            Cadastre-se
-          </router-link>
+        <p class="mt-4 text-white/80 max-w-sm">
+          Para continuar, faça login com suas credenciais. Estamos felizes em vê-lo novamente!
         </p>
-      </form>
-    </div>
 
-    <!-- Elementos decorativos animados -->
-    <div class="floating-shapes">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
+        <div class="mt-10 grid gap-3">
+          <div class="flex items-center gap-3 rounded-2xl bg-white/15 px-4 py-4 border border-white/15">
+            <div class="w-9 h-9 rounded-full bg-black/20 text-white flex items-center justify-center text-sm font-semibold">
+              1
+            </div>
+            <div class="text-white">
+              <p class="font-semibold">Enter your account</p>
+              <p class="text-sm text-white/70">Use your email and password</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-4 border border-white/10">
+            <div class="w-9 h-9 rounded-full bg-black/15 text-white/90 flex items-center justify-center text-sm font-semibold">
+              2
+            </div>
+            <div class="text-white/90">
+              <p class="font-semibold">Access your workspace</p>
+              <p class="text-sm text-white/60">See tasks and teams instantly</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-4 border border-white/10">
+            <div class="w-9 h-9 rounded-full bg-black/15 text-white/90 flex items-center justify-center text-sm font-semibold">
+              3
+            </div>
+            <div class="text-white/90">
+              <p class="font-semibold">Start organizing</p>
+              <p class="text-sm text-white/60">Create and manage your tasks</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Painel Direito (Form) -->
+      <section class="p-8 md:p-10 bg-gray-950">
+        <div class="max-w-md">
+          <h1 class="text-2xl font-semibold text-white">Sign In</h1>
+          <p class="mt-1 text-sm text-gray-400">Enter your personal data to continue.</p>
+
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              class="flex items-center justify-center gap-2 rounded-xl border border-gray-800 bg-gray-900/30 px-4 py-3 text-sm text-white hover:bg-gray-900/50 transition"
+            >
+              <i class="fa-brands fa-google"></i>
+              Google
+            </button>
+
+            <button
+              type="button"
+              class="flex items-center justify-center gap-2 rounded-xl border border-gray-800 bg-gray-900/30 px-4 py-3 text-sm text-white hover:bg-gray-900/50 transition"
+            >
+              <i class="fa-brands fa-github"></i>
+              Github
+            </button>
+          </div>
+
+          <div class="my-6 flex items-center gap-3">
+            <div class="h-px flex-1 bg-gray-800"></div>
+            <span class="text-xs text-gray-500">Or</span>
+            <div class="h-px flex-1 bg-gray-800"></div>
+          </div>
+
+          <form @submit="handleSubmit" class="space-y-4">
+            <div>
+              <label class="block text-sm text-gray-300 mb-2">Email</label>
+              <input
+                v-model="email"
+                type="email"
+                class="w-full rounded-xl border border-gray-800 bg-gray-900/30 px-4 py-3 text-white placeholder:text-gray-600 outline-none focus:border-teal-500"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm text-gray-300 mb-2">Password</label>
+              <input
+                v-model="password"
+                type="password"
+                class="w-full rounded-xl border border-gray-800 bg-gray-900/30 px-4 py-3 text-white placeholder:text-gray-600 outline-none focus:border-teal-500"
+                placeholder="Enter your password"
+                required
+              />
+              <div class="mt-3 flex justify-end">
+                <router-link
+                  to="/forgot-password"
+                  class="text-sm text-gray-400 hover:text-teal-400 transition-colors"
+                >
+                  Forgot password?
+                </router-link>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full rounded-xl bg-gradient-to-r from-teal-500 to-green-500 py-3 font-semibold text-white hover:opacity-95 transition disabled:opacity-70 disabled:cursor-not-allowed"
+              :disabled="isLoading"
+            >
+              <span v-if="!isLoading">Sign In</span>
+              <span v-else class="flex items-center justify-center gap-2">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Signing in...
+              </span>
+            </button>
+
+            <p class="text-center text-sm text-gray-400">
+              Don't have an account?
+              <router-link to="/register" class="text-teal-400 hover:text-teal-300 font-semibold transition-colors">
+                Sign up
+              </router-link>
+            </p>
+          </form>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -102,227 +158,5 @@ async function handleSubmit(event) {
 </script>
 
 <style scoped>
-.auth-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #0d0a14 0%, #1a1425 100%);
-}
 
-.auth-card {
-  width: 100%;
-  max-width: 450px;
-  background: rgba(26, 20, 37, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  border-radius: 24px;
-  padding: 3rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  animation: slideIn 0.6s ease-out;
-  position: relative;
-  z-index: 1;
-}
-
-.auth-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  animation: fadeInDown 0.8s ease-out;
-}
-
-.logo-container {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #14b8a6, #10b981);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-  animation: float 3s ease-in-out infinite;
-  box-shadow: 0 10px 30px rgba(20, 184, 166, 0.3);
-}
-
-.auth-form {
-  animation: fadeIn 1s ease-out 0.2s both;
-}
-
-.input-group {
-  margin-bottom: 1.5rem;
-}
-
-.input-label {
-  display: block;
-  color: #e5e7eb;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.input-wrapper {
-  position: relative;
-}
-
-.input-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6b7280;
-  font-size: 1rem;
-}
-
-.input-field {
-  width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
-  background: rgba(31, 41, 55, 0.5);
-  border: 1px solid rgba(107, 114, 128, 0.3);
-  border-radius: 12px;
-  color: white;
-  font-size: 0.95rem;
-  transition: all 0.3s;
-  outline: none;
-}
-
-.input-field::placeholder {
-  color: #6b7280;
-}
-
-.input-field:focus {
-  border-color: #14b8a6;
-  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-  background: rgba(31, 41, 55, 0.8);
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #14b8a6, #10b981);
-  color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(20, 184, 166, 0.5);
-}
-
-.btn-primary:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.btn-primary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 1.5rem 0;
-  color: #6b7280;
-  font-size: 0.875rem;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid rgba(107, 114, 128, 0.3);
-}
-
-.divider span {
-  padding: 0 1rem;
-}
-
-.floating-shapes {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.shape {
-  position: absolute;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(20, 184, 166, 0.1));
-  border-radius: 50%;
-  filter: blur(40px);
-}
-
-.shape-1 {
-  width: 300px;
-  height: 300px;
-  top: 10%;
-  left: -10%;
-  animation: float 8s ease-in-out infinite;
-}
-
-.shape-2 {
-  width: 400px;
-  height: 400px;
-  bottom: -10%;
-  right: -10%;
-  animation: float 10s ease-in-out infinite reverse;
-}
-
-.shape-3 {
-  width: 200px;
-  height: 200px;
-  top: 50%;
-  right: 10%;
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(5deg);
-  }
-}
 </style>
