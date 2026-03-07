@@ -89,7 +89,7 @@
             </div>
 
             <div>
-              <label class="block text-sm text-gray-300 mb-2">Password</label>
+              <label class="block text-sm text-gray-300 mb-2">Senha</label>
               <input
                 v-model="password"
                 type="password"
@@ -102,7 +102,7 @@
                   to="/forgot-password"
                   class="text-sm text-gray-400 hover:text-teal-400 transition-colors"
                 >
-                  Forgot password?
+                  Esqueci minha senha
                 </router-link>
               </div>
             </div>
@@ -120,9 +120,9 @@
             </button>
 
             <p class="text-center text-sm text-gray-400">
-              Don't have an account?
+              Não tem uma conta?
               <router-link to="/register" class="text-teal-400 hover:text-teal-300 font-semibold transition-colors">
-                Sign up
+                Criar conta
               </router-link>
             </p>
           </form>
