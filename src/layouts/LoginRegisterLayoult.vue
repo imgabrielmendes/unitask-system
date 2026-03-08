@@ -4,7 +4,7 @@
       <router-view/>
     </main>
 
-    <footerUser></footerUser>
+    <!-- <footerUser></footerUser> -->
   </div>
 </template>
 

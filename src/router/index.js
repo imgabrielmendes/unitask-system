@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomePage from '@/pages/HomePage.vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import LandingPage from '@/pages/LandingPage.vue'
+import LandingLayout from '@/layouts/LandingLayout.vue'
 
 //src\layouts\LoginRegisterLayoult.vue
 import LoginRegisterPage from '../pages/LoginRegisterPage.vue'
@@ -19,15 +21,16 @@ import ProjectsPage from '@/pages/ProjectsPage.vue'
 const routes = [
   {
     path: '/',
-    component: DefaultLayout,
+    component: LandingLayout,
     children: [
       {
         path: '',
-        name: 'Home',
-        component: HomePage
+        name: 'Landing',
+        component: LandingPage
       }
     ]
   },
+
 
   {
     path: '/home',
@@ -174,14 +177,16 @@ router.beforeEach((to, from, next) => {
     token = null
   }
 
-  const publicPages = ['/login', '/register', '/forgot-password']
+  const publicPages = ['/', '/login', '/register', '/forgot-password']
+  // Only redirect authenticated users away from auth-specific pages (not landing)
+  const authOnlyRedirectPages = ['/login', '/register', '/forgot-password']
   const authRequired = !publicPages.includes(to.path)
 
   if (authRequired && !token) {
     return next('/login')
   }
 
-  if (token && publicPages.includes(to.path)) {
+  if (token && authOnlyRedirectPages.includes(to.path)) {
     return next('/home')
   }
 
