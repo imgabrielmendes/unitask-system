@@ -2,8 +2,8 @@ version: '3.3'
 services:
   unitask-frontend:
     container_name: unitask-frontend
-    image: node:18-alpine
-    command: npm install && npm run dev
+    image: node:20-alpine
+    command: sh -c "npm install && npm run dev"
     working_dir: /var/www/unitask-system
     volumes:
       - .:/var/www/unitask-system
