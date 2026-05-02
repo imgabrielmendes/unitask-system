@@ -4,7 +4,7 @@ services:
     container_name: unitask-frontend
     image: node:18-alpine
     command: npm install && npm run build
-    workdir: /var/www/unitask-system
+    work_dir: /var/www/unitask-system
     volumes:
       - .:/var/www/unitask-system
     build: .
