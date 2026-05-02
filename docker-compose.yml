@@ -2,12 +2,11 @@ version: '3.3'
 services:
   unitask-frontend:
     container_name: unitask-frontend
-    image: node:18-alpine
-    command: npm install && npm run build
-    work_dir: /var/www/unitask-system
+    build: .
+    command: npm install && npm run dev
+    working_dir: /var/www/unitask-system
     volumes:
       - .:/var/www/unitask-system
-    build: .
     networks:
       - traefik
     expose:
