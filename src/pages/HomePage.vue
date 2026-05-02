@@ -210,7 +210,6 @@ export default {
           label: team.name ?? team.slug,
           name: team.name,
         }));
-        // Cache full home payload for subsequent visits
         sessionStorage.setItem('home_data', JSON.stringify({ user: this.user, tasks: this.tarefas, teams: this.teams }))
         // Also keep isolated user cache for header/sidebar
         if (this.user) sessionStorage.setItem('home_user', JSON.stringify(this.user));
@@ -223,23 +222,6 @@ export default {
       } finally {
         this.isLoadingTasks = false;
         this.isLoadingTeams = false;
-      }
-    },
-
-    async fetchTeamsData() {
-      this.isLoadingTeams = true
-      try {
-        
-        const response = await getTeams()
-        this.teams = response?.data?.data || response?.data || []
-
-      } catch (error) {
-
-        console.error('Erro ao buscar times:', error)
-        this.teams = []
-
-      } finally {
-        this.isLoadingTeams = false
       }
     },
 

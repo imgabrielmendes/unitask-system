@@ -52,3 +52,33 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'TeamsPage',
+  data() {
+    return {
+      teams: []
+    }
+  },
+  mounted() {
+    this.loadTeamsFromCache()
+  },
+  methods: {
+    loadTeamsFromCache() {
+      try {
+        const cached = sessionStorage.getItem('home_data')
+        if (!cached) {
+          this.teams = []
+          return
+        }
+        const data = JSON.parse(cached)
+        this.teams = Array.isArray(data?.teams) ? data.teams : []
+      } catch (error) {
+        console.error('Erro ao carregar equipes do cache:', error)
+        this.teams = []
+      }
+    }
+  }
+}
+</script>
+

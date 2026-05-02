@@ -8,9 +8,22 @@ export async function login(email, password) {
     password: password.value
     });
 
-    // Backend returns [token, statusCode] array
-    const token = Array.isArray(response.data) ? response.data[0] : response.data.token;
+    const payload = response?.data || {};
+    // Backward compatibility: legacy backend may return [token, statusCode]
+    const token = Array.isArray(payload) ? payload[0] : payload.token;
     localStorage.setItem('token', token);
+
+    // Preferred login payload
+    const user = Array.isArray(payload) ? null : (payload.user || null);
+    const teams = Array.isArray(payload?.teams) ? payload.teams : [];
+    const tasks = Array.isArray(payload?.tasks) ? payload.tasks : [];
+
+    sessionStorage.setItem('home_data', JSON.stringify({ user, teams, tasks }));
+    if (user) {
+      sessionStorage.setItem('home_user', JSON.stringify(user));
+    }
+
+    return payload;
 
 }
 

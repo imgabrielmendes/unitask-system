@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  unitask-frontend:
+    container_name: unitask-frontend
+    build: .
+    networks:
+      - traefik
+    expose:
+      - "5173"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.unitask-frontend.rule=Host(`unitask.ankocreative.com`)"
+      - "traefik.http.routers.unitask-frontend.entrypoints=websecure"
+      - "traefik.http.routers.unitask-frontend.tls=true"
+      - "traefik.http.routers.unitask-frontend.tls.certresolver=myresolver"
+      - "traefik.http.services.unitask-frontend.loadbalancer.server.port=5173"
+
+networks:
+  traefik:
+    external: true

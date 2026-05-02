@@ -92,8 +92,6 @@
 </template>
 
 <script>
-import { getTeam } from '@/services/teamService.js'
-
 export default {
   name: 'TeamPage',
   data() {
@@ -111,12 +109,40 @@ export default {
       this.isLoading = true
       try {
         const slug = this.$route.params.slug
-        const response = await getTeam(slug)
-        this.team = response?.data?.team || response?.data || null
-        this.teamTasks = response?.data?.tasks || []
+        const cached = sessionStorage.getItem('home_data')
+        if (!cached) {
+          this.team = null
+          this.teamTasks = []
+          return
+        }
+
+        const data = JSON.parse(cached)
+        const teams = Array.isArray(data?.teams) ? data.teams : []
+        const tasks = Array.isArray(data?.tasks) ? data.tasks : []
+
+        this.team = teams.find((team) => team?.slug === slug) || null
+
+        if (!this.team) {
+          this.teamTasks = []
+          return
+        }
+
+        if (Array.isArray(this.team.tasks)) {
+          this.teamTasks = this.team.tasks
+          return
+        }
+
+        const teamId = this.team?.id
+        const teamSlug = this.team?.slug
+        this.teamTasks = tasks.filter((task) => {
+          const taskTeamId = task?.team_id ?? task?.teamId ?? task?.team?.id
+          const taskTeamSlug = task?.team_slug ?? task?.teamSlug ?? task?.team?.slug
+          return (teamId && taskTeamId === teamId) || (teamSlug && taskTeamSlug === teamSlug)
+        })
       } catch (error) {
-        console.error('Erro ao buscar time:', error)
+        console.error('Erro ao carregar time do cache:', error)
         this.team = null
+        this.teamTasks = []
       } finally {
         this.isLoading = false
       }

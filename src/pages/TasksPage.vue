@@ -80,8 +80,6 @@
 </template>
 
 <script>
-import { getTarefas } from '@/services/taskService.js'
-
 export default {
   name: 'TasksPage',
   data() {
@@ -112,10 +110,15 @@ export default {
     async fetchTasks() {
       this.isLoading = true;
       try {
-        const response = await getTarefas();
-        this.tasks = response?.data || [];
+        const cached = sessionStorage.getItem('home_data');
+        if (!cached) {
+          this.tasks = [];
+          return;
+        }
+        const data = JSON.parse(cached);
+        this.tasks = Array.isArray(data?.tasks) ? data.tasks : [];
       } catch (error) {
-        console.error('Erro ao buscar tarefas:', error);
+        console.error('Erro ao carregar tarefas do cache:', error);
         this.tasks = [];
       } finally {
         this.isLoading = false;

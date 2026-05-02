@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import SidebarNav from '@/components/tasks/SidebarNav.vue'
 import HeaderDynamic from '@/components/tasks/HeaderDynamic.vue'
 import footerUser from '@/components/tasks/footer.vue'
-import { getTeams } from '@/services/teamService.js'
 
 export default {
   components: {
@@ -34,6 +34,7 @@ export default {
     SidebarNav
   },
   setup() {
+    const route = useRoute()
     const sidebarExpanded = ref(true)
     const teamOptions = ref([])
 
@@ -41,20 +42,32 @@ export default {
       sidebarExpanded.value = event.detail.expanded
     }
 
-    const fetchTeams = async () => {
+    const loadTeamsFromCache = () => {
       try {
-        const response = await getTeams()
-        teamOptions.value = response?.data || []
+        const cached = sessionStorage.getItem('home_data')
+        if (!cached) {
+          teamOptions.value = []
+          return
+        }
+        const data = JSON.parse(cached)
+        teamOptions.value = Array.isArray(data?.teams) ? data.teams : []
       } catch (error) {
-        console.error('Erro ao buscar times:', error)
+        console.error('Erro ao carregar times do cache:', error)
         teamOptions.value = []
       }
     }
 
     onMounted(() => {
       window.addEventListener('sidebar-toggle', handleSidebarToggle)
-      fetchTeams()
+      loadTeamsFromCache()
     })
+
+    watch(
+      () => route.path,
+      () => {
+        loadTeamsFromCache()
+      }
+    )
 
     onUnmounted(() => {
       window.removeEventListener('sidebar-toggle', handleSidebarToggle)
